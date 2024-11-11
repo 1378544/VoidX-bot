@@ -1,12 +1,3 @@
-local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-function IbLNGtccJjPZ(data) m=string.sub(data, 0, 55) data=data:gsub(m,'')
-
-data = string.gsub(data, '[^'..b..'=]', '') return (data:gsub('.', function(x) if (x == '=') then return '' end local r,f='',(b:find(x)-1) for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end return r; end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x) if (#x ~= 8) then return '' end local c=0 for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end return string.char(c) end)) end
-
-
- 
-
-
 local bootTime = os.time()
 local disconnected = false
 
@@ -19,7 +10,7 @@ local HH = bot.Character.Humanoid.HipHeight
 
 for i, plr in pairs(game.Players:GetPlayers()) do
 	for i, obj in pairs(plr:GetChildren()) do
-		if obj.Name == IbLNGtccJjPZ('aPnrwluNjhefTqKvtDxaYuWqxQnrRrsPQeyZoswpCskSqTjnMHURbBvTHVuYXJCb3RCbGFja2xpc3Q=') then
+		if obj.Name == "LunarBotBlacklist" then
 			obj:Destroy()		
 		end
 	end
@@ -34,28 +25,110 @@ local whitelisted = {
 local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or LunarBot to begin with [LunarBot]
 local allwhitelisted = _G.defaultAllWhitelisted or false --set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
 local randommoveinteger = _G.defaultRandomMoveInteger or 15 --interval in which how long randommove waits until choosing another direction
-local prefix = _G.defaultPrefix or IbLNGtccJjPZ('VlynhXYNSwXvzRphFBEHQgyfJisaRFYAMRIjnNqLiaddfaOPiwiNbiZLg==') --DO NOT SET TO MORE THAN 1 CHARACTER!
+local prefix = _G.defaultPrefix or "." --DO NOT SET TO MORE THAN 1 CHARACTER!
 
-if _G.preWhitelisted and type(_G.preWhitelisted) == IbLNGtccJjPZ('GRdXOaaRLQzxoPkTwpXVQtickNfNJMSfaeegBAuDvENnJMjkwWguHzJdGFibGU=') then
+if _G.preWhitelisted and type(_G.preWhitelisted) == "table" then
 	for i, v in pairs(_G.preWhitelisted) do
 		table.insert(whitelisted, v)
 	end
 end
 
 if prefix:len() > 1 then
-	warn(IbLNGtccJjPZ('qZHxKBmgQqiaRqKbbJVhfebLsgfoDjVYgWARbbFrgmUWtdwghlDNnkrVm9pZFggLy8gUHJlZml4IGNhbm5vdCBiZSBtb3JlIHRoYW4gMSBjaGFyYWN0ZXIgbG9uZyE='))
+	warn("VoidX // Prefix cannot be more than 1 character long!")
 	return
 end
 
---[[ end configs, donIbLNGtccJjPZ('JkyhflqUavkrytnNHUHZsriQWzOvXtIWhOxmiPCnCiZnXgdgxFwgFLadCBlZGl0IHRoaXMgZXNwZWNpYWxseSBpZiB5b3UgaGF2ZSBubyBpZGVhIHdoYXQgTHVhIGlzIGxtYW8gXV0tLQ0KDQpsb2NhbCBsdW5hcmJvdHZlcnNpb24gPSA=')v0.1.3 Public Beta ReleaseIbLNGtccJjPZ('JgIRIysACaLNZEvHBFOzSHcldHFIHYAwTBWHpbXMmdYRATRipEtTXJCDQpsb2NhbCBsdW5hcmJvdGNoYW5nZWxvZ3MgPSA=')Added a few commands!IbLNGtccJjPZ('jzSwmhVwCDxtieESruATwsSBRUaCoxzIKaTVNLAeHMqylzAsSepxScxDQoNCmxvY2FsIGdhbWVEYXRhID0gZ2FtZTpHZXRTZXJ2aWNlKA==')MarketplaceServiceIbLNGtccJjPZ('RvBEviIZzyoPjiIXlEybvTJUSfugaQMvUPQulJBPgApbDphYjkyLxUnKTpHZXRQcm9kdWN0SW5mbyhnYW1lLlBsYWNlSWQpDQpsb2NhbCBzdGF0dXMgPSBuaWwNCmxvY2FsIGZvbGxvd3BsciA9IG5pbA0KbG9jYWwgY29weWNoYXRwbGF5ZXIgPSBuaWwNCg0KbG9jYWwgVFMgPSBnYW1lOkdldFNlcnZpY2Uo')TweenServiceIbLNGtccJjPZ('wODSGTtDdbMQTzPWQBBrVyxqCKVMrmjznqFfBpDtDVJVyTTgdASOtEMKQ0KDQpsb2NhbCBUSSA9IFR3ZWVuSW5mby5uZXcoDQoJMi41LA0KCUVudW0uRWFzaW5nU3R5bGUuTGluZWFyLA0KCUVudW0uRWFzaW5nRGlyZWN0aW9uLk91dCwNCgkwLA0KCWZhbHNlLA0KCTANCikNCg0KbG9jYWwgZnVuY3Rpb24gY2hhdChtc2cpDQoJaWYgc2hvd2JvdGNoYXQgPT0gdHJ1ZSB0aGVuDQoJCWdhbWUuVGV4dENoYXRTZXJ2aWNlLlRleHRDaGFubmVscy5SQlhHZW5lcmFsOlNlbmRBc3luYyg=')[LunarBot]: IbLNGtccJjPZ('OPIMjaSRdjktVgfgpyzEjuGlrKVCzSTZtBdqGsmSnTmSDRxbEXznMgNIC4uIG1zZykNCgllbHNlDQoJCWdhbWUuVGV4dENoYXRTZXJ2aWNlLlRleHRDaGFubmVscy5SQlhHZW5lcmFsOlNlbmRBc3luYyhtc2cpDQoJZW5kDQplbmQNCg0KbG9jYWwgZnVuZmFjdHMgPSB7DQoJ')VoidX was created on 11/11/24IbLNGtccJjPZ('WVTQgniJmxsGKeoZBWGIdBOBUhAUNWyQbaoQHaNDvoUjrgGHEcMewOdLA0KCQ==')The developer of VoidX has made own executor: VoidXIbLNGtccJjPZ('whqYnRTLMCFCLPWHqLpfiLKVotFWrWiKKdeCZSgwujWZMRieZvHnYYXLA0KCQ==')The khord server uses an external invite service so we can get a custom invite because we donIbLNGtccJjPZ('WNWzVHiEBAzHbZpUMLDdavEQTnpZKHqYfvPasLKXjmXGzWGYqrvlHrGdCBoYXZlIG5pdHJvLiBkLmlvL0x1bmFyQ3JvY3M='),
-	IbLNGtccJjPZ('fItjJtXVPzRjtDoHJBGpQGqdacRCmXTlEjXXWSZIyMYDnicGLeJiQgZTXkgZGFkIGNhbWUgYmFjayBmcm9tIGdldHRpbmcgdGhlIG1pbGsgMC4wMyBzZWNvbmRzIGFnby4='),
-	IbLNGtccJjPZ('gKkcGAXBYbpcsqStHAsJkrdDYraQQNLaUtvPOTzsHMCOsDXgJfALmKIV2UgYXJlIHBsYXlpbmcgUm9ibG94Lg=='),
-	IbLNGtccJjPZ('vPMOGGVZjstZaPPbCOsUoyXAiOfhwUzcxpEuvpJjIQDCVtKFiibWLCaSWYgeW91IHNwZW5kIGEgcGVubnksIHlvdSBsb3NlIHRoYXQgcGVubnku'),
-	IbLNGtccJjPZ('NuHhuxYpIHolZIfupGonHpIZmNtCGMZvDAqnLOjEmzOOGPmUwNaqsYNUHJlc3Mg')YIbLNGtccJjPZ('gLYbaZFYJiBqnxaRpiQRjItQaGZvXuccjjRXFWHFcCNxBDdoKyCLVQfIHRvIGp1bXAu'),
-	IbLNGtccJjPZ('csCdYmlvmwhNpMDClqLlvsqyRmRObYzkyWBwHpYfLKJKnZuYMGicvuzQ29tbWFuZHMgYXJlIGFkZGVkIHRvIFZvaWRYIGFsbW9zdCBldmVyeSBkYXku'),
-	IbLNGtccJjPZ('JOZVAOtyrtmihKoOYubQQLIYQWCxKUhDCbOqyzIEKwCOFtBMPbkrLQAVm9pZFggd2FzIGRldmVsb3BlZCBhbmQgc2NyaXB0ZWQgYnkgcHJvYmFibFluaWNLLg=='),
-	IbLNGtccJjPZ('vMCSXifucoGjHtuSEsuQjZdiQZEwHIYvjIWUgmwydPlFOmQGFQxNYHlVm9pZFggaXMgYSBzZWxmLWJvdCwgbWVhbmluZyB0aGF0LCB5ZXMsIEkgQU0gQSBSRUFMIFBFUlNPTi4gSQ==')m watching!IbLNGtccJjPZ('OqmvJAnFdudDJphXqkraDOKLftoATJACZyRNhKrciYJJmxQdxLVXTZRLA0KCQ==')I..... AM STEVEIbLNGtccJjPZ('zezEhjVehGuwXpcIvXeVHQmLSxAnrWhtgNfyqhSHkDjoSvndbOmjUWrLA0KCQ==')Among Us is extremely old.IbLNGtccJjPZ('ObkhlOCHuVFwQigwESuxpBFeXlgPRZQsHMigBapfMuqRLaHRSyhNqnWLA0KCQ==')Press Alt + F4 to get 1 billion dollars on the spot.IbLNGtccJjPZ('RhsJVaBqbKJeWICvusIJarMxPbgDofqQKDUkpYcDTiHVFrXSCLYLdLcLA0KCQ==')Press U to walk forward.IbLNGtccJjPZ('nzvaLhMuAvunEcQqLhMgKXJayEbypgsTqDhjVyzERnQrhdnFzrvCAYcLA0KCQ==')At the time of writing this fun fact list, there are 6 people in the server.IbLNGtccJjPZ('qEUOONEFmoqnFDjzcgPzLiDINSbAlxHzFPeGDAhHenrGRqJexglkCDzLA0KCQ==')VoidX was first tested in the game: a literal baseplate.IbLNGtccJjPZ('FiIpSlBfCRvetloZPFhHmiQaOIofJARNYmaUlyUNMSRJXkecxTfrUjYLA0KCQ==')I found a lucky penny!IbLNGtccJjPZ('lAJsZtaUbBmAtrkmwovPsIaKIiJhYtmDyTtoSZtvBEdyawEBFCDQnVZLA0KCQ==')You found this fun fact.IbLNGtccJjPZ('zpDVntaPxeWVZmzPOrMgcUqTRUSJaVqFCjxsVVzyXsBnAnEHHQiNDftLA0KCQ==')The sandwich was invented in the 1700s.IbLNGtccJjPZ('TKNzuIngdYmnYytPhvXjBCVlbWaHyZhDOlVrBfsEHkXfxqVQOgkvTcuLA0KCQ==')If you drink poison, you might die.IbLNGtccJjPZ('yPhfEiBGyStANEOtvisPunlVzaNOhonMwYcucuZFRhEnZqcRRfNIkxGLA0KCQ==')Hot water will turn into ice faster than cold water.IbLNGtccJjPZ('pNQhmxxFQuDhtomLVMzipxGLPwLqHJlEUgraMLiJuNyjpTbnSBHpzPBLA0KCQ==')The Mona Lisa has no eyebrows.IbLNGtccJjPZ('AvvNMPNgQnxbwZcZXYzqvoewShFrSpQrtXUdtDkLvHoOJzDHqOyoyYILA0KCQ==')The strongest muscle in the body is the tongue.IbLNGtccJjPZ('XpfFeTdrErgKpQBfyUPvfMtTjEhInkUoUAZtYdyCFroTYMYWVqmuNJbLA0KCQ==')Ants take rest for around 8 minutes in a 12-hour period.IbLNGtccJjPZ('OFWfOeAWrglHejlpVdSGxvLeWYaSOCClwgNOpKomgLLjVtrWVygceXnLA0KCQ==')IbLNGtccJjPZ('BtgtTBYTKtBxkneoSpBzxqLkiaypMeKFnVMnulBsrcPAMvsZFtHlJAkSSBhbQ==') is the shortest complete sentence in the English language.IbLNGtccJjPZ('gXgnzTHRlVKOqlgpYwomMJcoQgMOLTlkPQYKUTYrDLMrWPOPoKUByeXLA0KCQ==')Coca-Cola was originally green.IbLNGtccJjPZ('emWuedyvgzVvfZzLaRtCuLcTxAXARNwjIXlqrOpWtDhHGDumUxeaSBiLA0KCQ==')I got most of these fun facts from Google.IbLNGtccJjPZ('GtORmKTocdSkOrULIvZsxZmYwyLOAKUGEoGFDSzhxOLIxrYqchHUTpYLA0KCQ==')Rabbits canIbLNGtccJjPZ('kRaUIqhCPoeECgaqMJcZIQLXocKQTjhSBAXSXhWpkHdfKFsjGvMEbuddCBnZXQgc2ljay4='),
-	IbLNGtccJjPZ('hwOwkIVuLTEouNbwhVsnrEuktHLmEkUhbqxIcdoksMOdlSbNGcURXDRTWNEb25hbGQ=')s invented a sweet-tasting type of broccoli.IbLNGtccJjPZ('jJgdOtrGJvPoLsZsezrACUzRpyTBvWyjPoUUqBxgNPBDwZNiuFqrxgJLA0KCQ==')Water makes different sounds depending on its temperature.IbLNGtccJjPZ('NzoNoqNzVQRvFknuulSbSWABcbSRSLzjTsKVOEikqGKmUBGcHZTRoztLA0KfQ0KDQpsb2NhbCBtZXNzYWdlUmVjZWl2ZWQgPSBnYW1lLlRleHRDaGF0U2VydmljZS5UZXh0Q2hhbm5lbHMuUkJYR2VuZXJhbC5NZXNzYWdlUmVjZWl2ZWQNCg0KbG9jYWwgY29tbWFuZHNNZXNzYWdlID0gew0KCQ==')cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>IbLNGtccJjPZ('PwvqyKzbfIGjYdSvsxsMsHFYOzpsFdrjqjrDDVtAhIMnVBlBuwhdeCxLA0KCQ==')setprefix <newPrefix>, setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>IbLNGtccJjPZ('TfKzzWMDYSrcvMzuxGVFflPCvenTnrJqVxtUjgZiVfTzjtcyjwwEYXMLA0KCQ==')salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setintervalIbLNGtccJjPZ('yZAPWaxBaBccCgvzDPiVfGDhIsTKVPYtnfINmCGLBUZMUwykjCOHupSLA0KCQ==')lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium, spin <speed>, float <height>, orbit <speed> <radius>, jump, follow, unfollow, executorIbLNGtccJjPZ('qPxgcmRaQCaKSiIqFYczlVLbNeJPjSxqZxpFpkeTcesKkOQoIqTGkVSLA0KfQ0KDQpsb2NhbCBvcmJpdGNvbg0KDQpsb2NhbCBmdW5jdGlvbiBvcmJpdCh0YXJnZXQsIHNwZWVkLCByYWRpdXMpDQoJbG9jYWwgciA9IHRvbnVtYmVyKHJhZGl1cykgb3IgMTANCglsb2NhbCBycHMgPSB0b251bWJlcihzcGVlZCkgb3IgbWF0aC5waQ0KCWxvY2FsIG9yYml0ZXIgPSBib3QuQ2hhcmFjdGVyLkh1bWFub2lkUm9vdFBhcnQNCglsb2NhbCBhbmdsZSA9IDANCglvcmJpdGNvbiA9IGdhbWU6R2V0U2VydmljZSg=')RunServiceIbLNGtccJjPZ('aonVRcGLkdDkHpboUycBPtdyQwaMpdVmcbKDOPOuurVCSsKuFrJOZETKS5IZWFydGJlYXQ6Q29ubmVjdChmdW5jdGlvbihkdCkNCgkJaWYgbm90IHRhcmdldC5DaGFyYWN0ZXIgdGhlbiByZXR1cm4gZW5kDQoJCW9yaWdpbiA9IHRhcmdldC5DaGFyYWN0ZXIuSHVtYW5vaWRSb290UGFydC5DRnJhbWUNCgkJYW5nbGUgPSAoYW5nbGUgKyBkdCAqIHJwcykgJSAoMiAqIG1hdGgucGkpDQoJCW9yYml0ZXIuQ0ZyYW1lID0gb3JpZ2luICogQ0ZyYW1lLm5ldyhtYXRoLmNvcyhhbmdsZSkgKiByLCAwLCBtYXRoLnNpbihhbmdsZSkgKiByKQ0KCWVuZCkNCmVuZA0KDQpsb2NhbCBmdW5jdGlvbiB1bm9yYml0KCkNCglvcmJpdGNvbjpEaXNjb25uZWN0KCkNCmVuZA0KDQpsb2NhbCBjb21tYW5kcyAtLWRvbg==')t change, could lead to errors
+--[[ end configs, don't edit this especially if you have no idea what Lua is lmao ]]--
+
+local lunarbotversion = "v0.1.3 Public Beta Release"
+local lunarbotchangelogs = "Added a few commands!"
+
+local gameData = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
+local status = nil
+local followplr = nil
+local copychatplayer = nil
+
+local TS = game:GetService("TweenService")
+
+local TI = TweenInfo.new(
+	2.5,
+	Enum.EasingStyle.Linear,
+	Enum.EasingDirection.Out,
+	0,
+	false,
+	0
+)
+
+local function chat(msg)
+	if showbotchat == true then
+		game.TextChatService.TextChannels.RBXGeneral:SendAsync("[LunarBot]: " .. msg)
+	else
+		game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
+	end
+end
+
+local funfacts = {
+	"VoidX was created on 11/11/24",
+	"The developer of VoidX has made own executor: VoidX",
+	"The khord server uses an external invite service so we can get a custom invite because we don't have nitro. d.io/LunarCrocs",
+	"My dad came back from getting the milk 0.03 seconds ago.",
+	"We are playing Roblox.",
+	"If you spend a penny, you lose that penny.",
+	"Press 'Y' to jump.",
+	"Commands are added to VoidX almost every day.",
+	"VoidX was developed and scripted by probablYnicK.",
+	"VoidX is a self-bot, meaning that, yes, I AM A REAL PERSON. I'm watching!",
+	"I..... AM STEVE",
+	"Among Us is extremely old.",
+	"Press Alt + F4 to get 1 billion dollars on the spot.",
+	"Press U to walk forward.",
+	"At the time of writing this fun fact list, there are 6 people in the server.",
+	"VoidX was first tested in the game: a literal baseplate.",
+	"I found a lucky penny!",
+	"You found this fun fact.",
+	"The sandwich was invented in the 1700s.",
+	"If you drink poison, you might die.",
+	"Hot water will turn into ice faster than cold water.",
+	"The Mona Lisa has no eyebrows.",
+	"The strongest muscle in the body is the tongue.",
+	"Ants take rest for around 8 minutes in a 12-hour period.",
+	"'I am' is the shortest complete sentence in the English language.",
+	"Coca-Cola was originally green.",
+	"I got most of these fun facts from Google.",
+	"Rabbits can't get sick.",
+	"McDonald's invented a sweet-tasting type of broccoli.",
+	"Water makes different sounds depending on its temperature.",
+}
+
+local messageReceived = game.TextChatService.TextChannels.RBXGeneral.MessageReceived
+
+local commandsMessage = {
+	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>",
+	"setprefix <newPrefix>, setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>",
+	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval",
+	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium, spin <speed>, float <height>, orbit <speed> <radius>, jump, follow, unfollow, executor",
+}
+
+local orbitcon
+
+local function orbit(target, speed, radius)
+	local r = tonumber(radius) or 10
+	local rps = tonumber(speed) or math.pi
+	local orbiter = bot.Character.HumanoidRootPart
+	local angle = 0
+	orbitcon = game:GetService("RunService").Heartbeat:Connect(function(dt)
+		if not target.Character then return end
+		origin = target.Character.HumanoidRootPart.CFrame
+		angle = (angle + dt * rps) % (2 * math.pi)
+		orbiter.CFrame = origin * CFrame.new(math.cos(angle) * r, 0, math.sin(angle) * r)
+	end)
+end
+
+local function unorbit()
+	orbitcon:Disconnect()
+end
+
+local commands --don't change, could lead to errors
 
 local function checkCommands(cmd)
 	for i, cmds in pairs(commands) do
@@ -84,9 +157,9 @@ end
 
 commands = {
 	cmds = {
-		Name = IbLNGtccJjPZ('ASIYfRLmTsYxbWMUPprItcVzGzVXCcJdEFfDpYGsMDyYSzmpNnWSmGnY21kcw=='),
-		Aliases = {IbLNGtccJjPZ('TVdfdSJzjoXbtlKTKqjjtphiaeZliqUWKpzwBAJGifceJnIVHRFUprhY29tbWFuZHM=')},
-		Use = IbLNGtccJjPZ('AFFybQdHfZPHrYRLyDqJCmqEDOVTeZveDTMTnnDWjYwNmYzkbKQAUtnTGlzdHMgYWxsIGNvbW1hbmRzIQ=='),
+		Name = "cmds",
+		Aliases = {"commands"},
+		Use = "Lists all commands!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
@@ -98,9 +171,9 @@ commands = {
 		end,
 	},
 	aliases = {
-		Name = IbLNGtccJjPZ('jTaTQbEYoQlDiWzCJFPsYnRdUWemwpPNTehuGGiscosAcTYwojZWZZPYWxpYXNlcw=='),
+		Name = "aliases",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('ETtyeANJSPUIYjkGlnYEULLmCoeFAiLqwlclbOsXMbICxpvIDAFjqEPTGlzdHMgdGhlIGFsaWFzZXMgZm9yIHRoZSBnaXZlbiBjb21tYW5kIQ=='),
+		Use = "Lists the aliases for the given command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
@@ -109,29 +182,29 @@ commands = {
 				local cmd = checkCommands(args[2])
 				
 				local function getAliases(c)
-					local str = IbLNGtccJjPZ('dCiNnyJqyeHycziOyGYodcTWbhwiDaAgCURRrnspoZaGdPbiAMDzXhg')
+					local str = ""
 					
-					if #c.Aliases == 0 then return IbLNGtccJjPZ('giImEVlYJxRkkfhIVLFhwbMOlHSFefiuFmPweWUgBiaYUwBCXJoPhnUTm9uZQ==') end
+					if #c.Aliases == 0 then return "None" end
 					
 					for i, a in pairs(c.Aliases) do
-						str = str .. a .. IbLNGtccJjPZ('DMbHZkqBJYBRTijxUdYfIkZBQgycPVcrAhvehAUUyNEqMhNtiMIdqbBLCA=')
+						str = str .. a .. ", "
 					end
 					
 					return str
 				end
 				
 				if cmd then
-					chat(cmd.Name .. IbLNGtccJjPZ('iMHkbtxgzHRlCQNZaVHdEnCZDohwSROIQDydhFjJJeDuysSjTwNvEijIC0g') .. getAliases(cmd))
+					chat(cmd.Name .. " - " .. getAliases(cmd))
 				else
-					chat(IbLNGtccJjPZ('trQgHSQUDTADExVqeaENwVgUvkLNHQtRjZtKnvQkMstvRTWYbXkZtTiSW52YWxpZCBjb21tYW5kIQ=='))
+					chat("Invalid command!")
 				end
 			end)
 		end,
 	},
 	help = {
-		Name = IbLNGtccJjPZ('dYRgjyCvOAyYoPSNMZnkvRcyHBiZBASWDKUSVhxQJJxeQNjTMzrtsKJaGVscA=='),
-		Aliases = {IbLNGtccJjPZ('IuAaUTxmxCgoCdoQpMrKrBDnovecsKDzoiPQtFYPgEIXSUXZOAutmJlaGVscA==')},
-		Use = IbLNGtccJjPZ('dQmcNvqrQHrRQnJfYZRkHJaGocisSZBLpkbFerkiDWRfahTeWacdxDgVGVsbHMgeW91IHRoZSB1c2Ugb2YgPGNvbW1hbmQ+IQ=='),
+		Name = "help",
+		Aliases = {"help"},
+		Use = "Tells you the use of <command>!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
@@ -146,20 +219,20 @@ commands = {
 				local cmd = checkCommands(args[2])
 				
 				if cmd then
-					chat(cmd.Name .. IbLNGtccJjPZ('ImLUrkMheMAFBDCUEtNMiGhIgXkkZYcYLFmkGzNzTLkZpVrwrVdPPpCIC0g') .. cmd.Use)
+					chat(cmd.Name .. " - " .. cmd.Use)
 				else
-					chat(IbLNGtccJjPZ('QrDhQLPEecsBeVMvnHDUyaGvdjxiwdYiXRbdrXHTrgudRfaqLKBHqVDSW52YWxpZCBjb21tYW5kIQ=='))
+					chat("Invalid command!")
 				end
 			end)
 		end,
 	},
 	reset = {
-		Name = IbLNGtccJjPZ('gGegfSZNYqOqzlhfltZkMczVlTGfkUVFJCsOfdfMfczrwKcUaKhxHfCcmVzZXQ='),
-		Aliases = {IbLNGtccJjPZ('JcGTbkGXApFEVgbXfMbbkDqkFeaFBjDcjZEGUlYRlyyRjdNGZXfZwiRcmU=')},
-		Use = IbLNGtccJjPZ('oeDtqclLMTjjgiosVTXIOOxbHPPvIrpUrZYhQdCqWjFQwLjfuFzeBNoUmVzcGF3bnMgTHVuYXJCb3Qh'),
+		Name = "reset",
+		Aliases = {"re"},
+		Use = "Respawns LunarBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			local hum = bot.Character:FindFirstChildWhichIsA(IbLNGtccJjPZ('wrDxRwELiLaktCLBxorjaCSkyPloWRmUdPrExmkTaqzAjAOHLJprKVJSHVtYW5vaWQ='))
+			local hum = bot.Character:FindFirstChildWhichIsA("Humanoid")
 			
 			if hum then
 				hum.Health = 0
@@ -167,34 +240,34 @@ commands = {
 		end,
 	},
 	rejoin = {
-		Name = IbLNGtccJjPZ('nRUoXAaHlaDnlpDTwIZgtEnWZAYsYOnIbpmMssZMvuVAuHFpBuSuLPVcmVqb2lu'),
-		Aliases = {IbLNGtccJjPZ('xRbyqPjindOEYWFjDOjbzjjUIXgfiTtvkoUSynyjpysgcETABtbKHuxcmo=')},
-		Use = IbLNGtccJjPZ('vgkUdDXIImfEKwvzozZaIgfDOvIagCWtyMuCfyTaiygjfJmPUsBgfkxUmVqb2lucyBMdW5hckJvdCE='),
+		Name = "rejoin",
+		Aliases = {"rj"},
+		Use = "Rejoins LunarBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			if speaker ~= bot.Name and altctrl == false then chat(IbLNGtccJjPZ('rAaupYHwmbzpOZoTiYlPOqeuhpnulsyfAoipKRisypBDlQJNDGVRTbzSW52YWxpZCBwZXJtaXNzaW9ucyB0byByZWpvaW4u')) return end
+			if speaker ~= bot.Name and altctrl == false then chat("Invalid permissions to rejoin.") return end
 		
 			if #game.Players:GetPlayers() <= 1 then
-				print(IbLNGtccJjPZ('gkbhrMqOHCymuDaGKmdVBBAexMonTWsfVomIgEvyjFsignjvmPwQzagUmVqb2luaW5nIChORVcgU0VSVkVSKQ=='))
-				game.Players.LocalPlayer:Kick(IbLNGtccJjPZ('APHlFlPEZwWhyYXYdjOdSWtkEQfEeqcNmUZypMQEzHjBzxRZnvVFccZXG5MdW5hckJvdCAtIFJlam9pbmluZy4uLg=='))
+				print("Rejoining (NEW SERVER)")
+				game.Players.LocalPlayer:Kick("\nLunarBot - Rejoining...")
 				wait()
-				game:GetService(IbLNGtccJjPZ('fzrZTQdanEZsLmktUgVrhgXUUtIqnmulaqCCamewEmEojBvmmzHJAeWVGVsZXBvcnRTZXJ2aWNl')):Teleport(game.PlaceId, game.Players.LocalPlayer)
+				game:GetService('TeleportService'):Teleport(game.PlaceId, game.Players.LocalPlayer)
 			else
-				print(IbLNGtccJjPZ('FaEqznaZbTeQMTvJzhuaXGTaspfMaINmEjlpnWzxbfJihEPrAqroHAvTHVuYXJCb3QgaXMgcmVqb2luaW5nLi4u'))
-				game:GetService(IbLNGtccJjPZ('QMHfHpuGnoZOIhZatsmzylsEqTGNxNFkjOcRdFjNXzEmoGGGJRkFmPTVGVsZXBvcnRTZXJ2aWNl')):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+				print("LunarBot is rejoining...")
+				game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
 			end
 		end,
 	},
 	catch = {
-		Name = IbLNGtccJjPZ('YKneTXsSAaouOdjAXHgsHCuAXjriirdJiDHKOjlnKVOWnojpziLGtuwY2F0Y2g='),
-		Aliases = {IbLNGtccJjPZ('DjFIITXStFfrEUvIRQeVPlOhVnCzxwuCxfPwlUckwLFAQnXZpVvedOLY2F0Y2hpbjRr'), IbLNGtccJjPZ('KOmUPtrmWtTYWmJZiywclyekKCIzQIXvjDArdReObUqLKHrpHnQLdXQYzE0')},
-		Use = IbLNGtccJjPZ('NbuaFwndGrhoaTXTKOXXXoXfxOuDeKbVTlwkUKJWaToLbDdVMLkbldZTWFrZXMgVm9pZFggY2F0Y2ggdGhlIGdpdmVuIHBsYXllciBpbiA0SyE='),
+		Name = "catch",
+		Aliases = {"catchin4k", "c14"},
+		Use = "Makes VoidX catch the given player in 4K!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local plr
 			
 			if args[2] then
-				if args[2] == IbLNGtccJjPZ('nFmPvEpeBjVucjWrWJMGGYMcymdLtbfxuDBqghgSUUewBzykzEVmLQRcmFuZG9t') then
+				if args[2] == "random" then
 					local players = game.Players:GetPlayers()
 					
 					plr = players[math.random(1, #players)]
@@ -204,7 +277,7 @@ commands = {
 					if searched ~= nil then
 						plr = searched
 					else
-						chat(IbLNGtccJjPZ('AOgKsmuVgQEOAfFvZmMiZLcPkVXNuRRCAConFkpYYhaxPNUSPETjoBOSW52YWxpZCBwbGF5ZXIh'))
+						chat("Invalid player!")
 						return
 					end
 				end
@@ -214,46 +287,173 @@ commands = {
 			
 			if plr then
 				bot.Character:SetPrimaryPartCFrame(CFrame.new(plr.Character.HumanoidRootPart.Position))
-				chat(IbLNGtccJjPZ('CelFvkSKsqbkzEInQjhgZJRUPxwGbPTjZjswkUYtTuOZSnmvUnOEJjU8J+TuCBHT1QgQ0FVR0hUIE9OIDhLIEJZIFZPSURYQk9UIEhBSEEg8J+TuA=='))
+				chat("📸 GOT CAUGHT ON 8K BY VOIDXBOT HAHA 📸")
 			end
 		end,
 	},
 	ping = {
-		Name = IbLNGtccJjPZ('aEMBksamMwuTFVXCALkJlIMAgDYhEGyqHXaeIjRcuTkSGmoEryrUqJZcGluZw=='),
-		Aliases = {IbLNGtccJjPZ('etZkAmXcbDFdFxRNxyKAvuWEUEgKRXJZfdZqpvbqCxUGQgXFmRRkiXnZ2V0cGluZw==')},
-		Use = IbLNGtccJjPZ('qBlKqCMCaAFiPLnCxSpGxhywiTsyknggkXJnFCMGCqucLsThbUIKATyQ2hhdHMgVm9pZFg=')s ping!IbLNGtccJjPZ('oRcrVPkqmHoZiwYNUgTzHYxqbmrvmfRTRtfUmGbGADzxrRJKJtUIqGzLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJY2hhdCg=')Ping: IbLNGtccJjPZ('FYkIVbpMiermkvXqFmObaBELgPkbqegkTMzNHPUCAWHRWkhrHAQPZLZIC4uIHRvc3RyaW5nKG1hdGguZmxvb3IoZ2FtZTpHZXRTZXJ2aWNlKA==')StatsIbLNGtccJjPZ('AKdJIudFbeizppwAcMEoKyVHFAvCMTIKwiDgWkwxKzDxfJFclNyxgAKKS5QZXJmb3JtYW5jZVN0YXRzLlBpbmc6R2V0VmFsdWUoKSArIDAuNSkpIC4uIA==') msIbLNGtccJjPZ('UVxgQGkxmbImuLWZLbwBSaBEDeVFUrmnvjllVqzlXkmoYAQCkLLssVaKQ0KCQllbmQsDQoJfSwNCglleGVjdXRvciA9IHsNCgkJTmFtZSA9IA==')executorIbLNGtccJjPZ('slyVBCAMoliDRjnWFTNGFOQERhwDgzIuosKYhhqNEPFLfVGJmBqwtbNLA0KCQlBbGlhc2VzID0gew==')identifyexecutorIbLNGtccJjPZ('jVSzPiBZrPWUZCynYPStAjBSimyFdAAJaaTIQUCXdDkDOWIyWopVohDLCA=')getexecIbLNGtccJjPZ('FHkWCHSijEQPcUzvDKzxxaiBuibHxJHIVJxvPxmIZSBqIZyfWFqQmBILCA=')execIbLNGtccJjPZ('UOqWlEutyUfhqbGHHeaHrAORBOaxbLMoIwOLEZIlNvWJnairUkGIxoAfSwNCgkJVXNlID0g')Gives you the executor that is running LunarBot!IbLNGtccJjPZ('YdfacNbXTwlAHTcXrVbPjhmMnjhSKpMXNCdQgzQPPjqUfhELcXUSlxeLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJY2hhdCg=')Executor: IbLNGtccJjPZ('OGiYOgULnfGdMqarxUFLzMzKeScHuljCGjqHWBPBTQNHfzeedWCTdhUIC4uIGlkZW50aWZ5ZXhlY3V0b3IoKSBvciA=')UnknownIbLNGtccJjPZ('OCHvZxgayxvwZkbOAcbIhsZugKfSutlbhkZGNgHzBAXDKwmGZSWhsmWKQ0KCQllbmQsDQoJfSwNCglsdWEgPSB7DQoJCU5hbWUgPSA=')luaIbLNGtccJjPZ('bEWMLKMCyTcTMmYqheQhnWQlHbyWdfklPwuOhDTOhYsWhFeKtrVjalXLA0KCQlBbGlhc2VzID0gew==')runluaIbLNGtccJjPZ('FKGRLJGyQJVnqVSjtQnKXcRdxHzTmxHrOqCpAyZlAeuqCYArWvCkMGlLCA=')runIbLNGtccJjPZ('UAtuuRaBulKEmWZOhGOMUfhzWcMatyElMgdUyJeTLjNvjjFnfocpwiOLCA=')luauIbLNGtccJjPZ('UYcnZKkThaYKBDIvxVrovoXdrQcRLxLWqrztgHZLmbxaALjBJiJNLZPfSwNCgkJVXNlID0g')Gives you the executor that is running LunarBot!IbLNGtccJjPZ('JSeFJgCsztyEJckkxmNgrVyxrxrGDZpUuWmXHvGEmrusTDXlViOHENYLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJaWYgc3BlYWtlciB+PSBib3QuTmFtZSB0aGVuDQoJCQkJY2hhdCg=')You do not have permission to run LuaU from LunarBot.IbLNGtccJjPZ('ZHavpCtllPhEmxPmXfGmtAbkAaBwtAvtrqXsTHgwoHbiyPWLwlnIMjdKQ0KCQkJCXJldHVybg0KCQkJZW5kDQoJCQkNCgkJCWxvY2FsIHRvcnVuID0gc3RyaW5nLnN1Yihtc2csIDUpDQoJCQkNCgkJCWxvY2FsIHN1Y2Nlc3MsIGVyck1zZyA9IHBjYWxsKGZ1bmN0aW9uKCkNCgkJCQlsb2Fkc3RyaW5nKHRvcnVuKSgpDQoJCQllbmQpDQoJCQkNCgkJCWlmIHN1Y2Nlc3MgdGhlbg0KCQkJCWNoYXQo')Successfully ran LuaU with no errors.IbLNGtccJjPZ('EWwFTHjLtRxuJCbSFeBaUeVjqwZHngjgdtapxcqHZjrvAsDTNnoQQEZKQ0KCQkJZWxzZWlmIG5vdCBzdWNjZXNzIGFuZCBlcnJNc2cgdGhlbg0KCQkJCWNoYXQo')Failed to run LuaU with error in Developer Console [F9]!IbLNGtccJjPZ('WRdFPlzwilzMaejNqqQzjatnQVhhSogmQihnLOCnOwZuZWsSirtWDwhKQ0KCQkJZW5kDQoJCWVuZCwNCgl9LA0KCXNldGludGVydmFsID0gew0KCQlOYW1lID0g')setintervalIbLNGtccJjPZ('yeSQbvPShAeafUDoOtPbWnWXURPCWHyyMiLyyvgSOCdAEsnJBqLghQXLA0KCQlBbGlhc2VzID0gew==')setrandommoveintervalIbLNGtccJjPZ('wodJbZFHlXoFzgPbIFwBchinciAunOMCfOpKoJiZsVDgFsuWaxeCHUCLCA=')setintIbLNGtccJjPZ('zBzcDoHSPpIINgCGeZxXTZptAEzsMxOMPrBfPyfNIMbIbEXbrybDtRQLCA=')setintegerIbLNGtccJjPZ('xYrhPkKRxNlyNKEXabiIFEmeiiuHthHirllxtoMErCKxrmpceMtOiOJfSwNCgkJVXNlID0g')Respawns LunarBot!IbLNGtccJjPZ('iuQpkuOgOsNasUAuufdVysoOshWdDvsDBdGFHbZubTPGtiSfrVsHHgtLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJaWYgc3BlYWtlciB+PSBib3QuTmFtZSB0aGVuIHJldHVybiBlbmQNCgkJDQoJCQlpZiBub3QgYXJnc1syXSB0aGVuIHJldHVybiBlbmQNCgkJCWlmIG5vdCB0b251bWJlcihhcmdzWzJdKSB0aGVuIHJldHVybiBlbmQNCgkJDQoJCQlyYW5kb21tb3ZlaW50ZWdlciA9IHRvbnVtYmVyKGFyZ3NbMl0pDQoJCWVuZCwNCgl9LA0KCXRvZ2dsZWFsbCA9IHsNCgkJTmFtZSA9IA==')toggleallIbLNGtccJjPZ('dTPNfxwfUHODZHlsrMpOHbCzVCgFVUSyjDJNWXSSXTLAYWgcsIFpLQOLA0KCQlBbGlhc2VzID0gew==')allIbLNGtccJjPZ('qxVAbcGiLkKxGIKkwJkSZXijqFsjVCurjZcQvHZOTLgXgfMsMLzryemLCA=')allwlIbLNGtccJjPZ('jZftAJSSfhQrbVzApziEdcgAGYpSLLxsZLvquQgQBtcftkDaZixHsniLCA=')wlallIbLNGtccJjPZ('pZSrxiXgQEmreMwMGmFsxHwjzaPHwSkxjvuSUiFwliRtiztKUpkHHfefSwNCgkJVXNlID0g')Respawns LunarBot!IbLNGtccJjPZ('KwIjrEzeyEstbOOlFRALstzFRnSZpOjSZUQdAjLhZTRQyywlxqGsRGcLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJdGFzay5zcGF3bihmdW5jdGlvbigpDQoJCQkJaWYgc3BlYWtlciB+PSBib3QuTmFtZSB0aGVuIHJldHVybiBlbmQNCgkJCQ0KCQkJCWFsbHdoaXRlbGlzdGVkID0gbm90IGFsbHdoaXRlbGlzdGVkDQoJCQkJDQoJCQkJd2FpdCgpDQoJCQkJDQoJCQkJY2hhdCg=')Set all_whitelisted to IbLNGtccJjPZ('ZbEZLaSlUaURwtdaGebNanTnngnTMfqtHuptKpBnGdieQXBPJesCzvcIC4uIHRvc3RyaW5nKGFsbHdoaXRlbGlzdGVkKSkNCgkJCWVuZCkNCgkJZW5kLA0KCX0sDQoJZ2FtZW5hbWUgPSB7DQoJCU5hbWUgPSA=')gamenameIbLNGtccJjPZ('dbCOtbLIOObCfeAezUVKOdgSmEJYAsazXqWufjcxKbAwwAwobXDlzycLA0KCQlBbGlhc2VzID0gew==')gnIbLNGtccJjPZ('gmzACpdWNGKIqwgTjAuSwIPWENQHlGyBvsuXigsMGRYJxXhvyNeQxgNfSwNCgkJVXNlID0g')Chats the current gameIbLNGtccJjPZ('UazBYkvxNiRhMWbEQUhjMMxkGaFnMAPqfjiWFMCvkzkIBRIeRHQJNzScyBuYW1lIQ=='),
+		Name = "ping",
+		Aliases = {"getping"},
+		Use = "Chats VoidX's ping!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			chat("Ping: " .. tostring(math.floor(game:GetService("Stats").PerformanceStats.Ping:GetValue() + 0.5)) .. " ms")
+		end,
+	},
+	executor = {
+		Name = "executor",
+		Aliases = {"identifyexecutor", "getexec", "exec"},
+		Use = "Gives you the executor that is running LunarBot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			chat("Executor: " .. identifyexecutor() or "Unknown")
+		end,
+	},
+	lua = {
+		Name = "lua",
+		Aliases = {"runlua", "run", "luau"},
+		Use = "Gives you the executor that is running LunarBot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			if speaker ~= bot.Name then
+				chat("You do not have permission to run LuaU from LunarBot.")
+				return
+			end
+			
+			local torun = string.sub(msg, 5)
+			
+			local success, errMsg = pcall(function()
+				loadstring(torun)()
+			end)
+			
+			if success then
+				chat("Successfully ran LuaU with no errors.")
+			elseif not success and errMsg then
+				chat("Failed to run LuaU with error in Developer Console [F9]!")
+			end
+		end,
+	},
+	setinterval = {
+		Name = "setinterval",
+		Aliases = {"setrandommoveinterval", "setint", "setinteger"},
+		Use = "Respawns LunarBot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			if speaker ~= bot.Name then return end
+		
+			if not args[2] then return end
+			if not tonumber(args[2]) then return end
+		
+			randommoveinteger = tonumber(args[2])
+		end,
+	},
+	toggleall = {
+		Name = "toggleall",
+		Aliases = {"all", "allwl", "wlall"},
+		Use = "Respawns LunarBot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			task.spawn(function()
+				if speaker ~= bot.Name then return end
+			
+				allwhitelisted = not allwhitelisted
+				
+				wait()
+				
+				chat("Set all_whitelisted to " .. tostring(allwhitelisted))
+			end)
+		end,
+	},
+	gamename = {
+		Name = "gamename",
+		Aliases = {"gn"},
+		Use = "Chats the current game's name!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			chat(gameData.Name)
 		end,
 	},
 	playercount = {
-		Name = IbLNGtccJjPZ('PJZZiAYoNbojcYTvkLOMrUgwANiBZrZqBlhAARTLdVidDsIREFegGkocGxheWVyY291bnQ='),
-		Aliases = {IbLNGtccJjPZ('qrWZEAQVdHbVmrNkZmgtxYPuMrEFLikniOHmFwUhhEtoFhSJxcKbMDacGxyY291bnQ=')},
-		Use = IbLNGtccJjPZ('osJFsbfUFyvoXMiKMhueLjilwZuOobJZwdXtJhhFmqvGNZGeQiPsxziQ2hhdHMgdGhlIGN1cnJlbnQgYW1vdW50IG9mIHBsYXllcnMh'),
+		Name = "playercount",
+		Aliases = {"plrcount"},
+		Use = "Chats the current amount of players!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			chat(tostring(#game.Players:GetPlayers()))
 		end,
 	},
 	maxplayers = {
-		Name = IbLNGtccJjPZ('WMVOnoYlUYxoeHKkQnUJbVBWOKBgcqXRNsVhLxSOlslFlKcZUrJWpRnbWF4cGxheWVycw=='),
-		Aliases = {IbLNGtccJjPZ('bPfSnRZqzBrCBdChSSCUaDUpjcMFxFMzKCjkujJifILDVERhdhclyXxbWF4cGxycw==')},
-		Use = IbLNGtccJjPZ('WTQkMwpAqCljlaLqijBdxSlVhXWCwDugeohmenjJhetsNeJzLrefPprQ2hhdHMgdGhlIGN1cnJlbnQgc2VydmVy')s maximum player count!IbLNGtccJjPZ('TroIKSLVjAPGdJXYCdXvqClEPKieTRrclLUUrbrcUWDGJSLXDQgdMkFLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJY2hhdCh0b3N0cmluZyhnYW1lLlBsYXllcnMuTWF4UGxheWVycykpDQoJCWVuZCwNCgl9LA0KCXVuZm9sbG93ID0gew0KCQlOYW1lID0g')unfollowIbLNGtccJjPZ('GXyUDZmfdeaARmVQYtNtGwpZTnHSEgRQFqrSgVEApWTfDwVsvYFRsLtLA0KCQlBbGlhc2VzID0gew==')unfollowplrIbLNGtccJjPZ('QvXfrLfeXVOrniwZTzoMxktKduleCglgFtXqXytJSgqCYkARjCNmKBufSwNCgkJVXNlID0g')Respawns VoidX!IbLNGtccJjPZ('WFhTaUpefnUsEtasKhiDuFXrgypHBqWlrsDTeFlZuuvjCHoYzOTkMTDLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCXRhc2suc3Bhd24oZnVuY3Rpb24oKQ0KCQkJCQlmb2xsb3dwbHIgPSBuaWwNCgkJCQkJd2FpdCgpDQoJCQkJCWJvdC5DaGFyYWN0ZXIuSHVtYW5vaWQ6TW92ZVRvKGJvdC5DaGFyYWN0ZXIuSHVtYW5vaWRSb290UGFydC5Qb3NpdGlvbikNCgkJCQllbmQpDQoJCQllbmQpDQoJCWVuZCwNCgl9LA0KCWZvbGxvdyA9IHsNCgkJTmFtZSA9IA==')followIbLNGtccJjPZ('eahklVDKRAQzsYHhLMEdEgjUcGoPddFWeMnqLwdZsLwexYzOcnSPMeSLA0KCQlBbGlhc2VzID0gew==')followplrIbLNGtccJjPZ('keRRSspPXLzPdymugmPMNPyBcLlYvlbIgngbsOiPDQGVsVQaKZqWoeFfSwNCgkJVXNlID0g')Makes VoidX follow you or the given player!IbLNGtccJjPZ('CCkSGxKMkoFJMNKAVVJfhKDBoVZHrgioJlZHDdMttwfrvLIqUZsQDOnLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJbG9jYWwgcGxyDQoJCQkNCgkJCWlmIGFyZ3NbMl0gdGhlbg0KCQkJCWlmIGFyZ3NbMl0gPT0g')randomIbLNGtccJjPZ('OxySARYQZgfJibnQYdscWMkGbhUughdTVDhbPNJoruLxTPjzlLJBFtaIHRoZW4NCgkJCQkJbG9jYWwgcGxheWVycyA9IGdhbWUuUGxheWVyczpHZXRQbGF5ZXJzKCkNCgkJCQkJDQoJCQkJCXBsciA9IHBsYXllcnNbbWF0aC5yYW5kb20oMSwgI3BsYXllcnMpXQ0KCQkJCWVsc2UNCgkJCQkJbG9jYWwgc2VhcmNoZWQgPSBzZWFyY2hQbGF5ZXJzKGFyZ3NbMl0pDQoJCQkJDQoJCQkJCWlmIHNlYXJjaGVkIH49IG5pbCB0aGVuDQoJCQkJCQlwbHIgPSBzZWFyY2hlZA0KCQkJCQllbHNlDQoJCQkJCQljaGF0KA==')Invalid player!IbLNGtccJjPZ('cInoJiEaWxHxpMacOAvHrIelsdwFBihmhNQJUuYJnjzCTytkjpOilLVKQ0KCQkJCQkJcmV0dXJuDQoJCQkJCWVuZA0KCQkJCWVuZA0KCQkJZWxzZQ0KCQkJCXBsciA9IGdhbWUuUGxheWVyczpGaW5kRmlyc3RDaGlsZChzcGVha2VyKQ0KCQkJZW5kDQoJCQkNCgkJCWZvbGxvd3BsciA9IHBscg0KCQllbmQsDQoJfSwNCglqb2JpZCA9IHsNCgkJTmFtZSA9IA==')jobidIbLNGtccJjPZ('FQCngeNFUzLlPpkWjfDaBRHBPNGkYmbrMvjYJKvRDovnORepgvdtxslLA0KCQlBbGlhc2VzID0gew==')serveridIbLNGtccJjPZ('yySCiWdAWbWnaAWJbHUORGbRvhaFiWdphCAibeaLgknhJvmfhwBaXeKfSwNCgkJVXNlID0g')Returns the current serverIbLNGtccJjPZ('tyPiTTjTcpkiQPBdNPSwfuljAwYdDMJParRLZDWBdQRjeptGzhmGPoBcyBTZXJ2ZXIgSUQsIG9yIEpvYiBJRC4='),
+		Name = "maxplayers",
+		Aliases = {"maxplrs"},
+		Use = "Chats the current server's maximum player count!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			chat(tostring(game.Players.MaxPlayers))
+		end,
+	},
+	unfollow = {
+		Name = "unfollow",
+		Aliases = {"unfollowplr"},
+		Use = "Respawns VoidX!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				task.spawn(function()
+					followplr = nil
+					wait()
+					bot.Character.Humanoid:MoveTo(bot.Character.HumanoidRootPart.Position)
+				end)
+			end)
+		end,
+	},
+	follow = {
+		Name = "follow",
+		Aliases = {"followplr"},
+		Use = "Makes VoidX follow you or the given player!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			local plr
+			
+			if args[2] then
+				if args[2] == "random" then
+					local players = game.Players:GetPlayers()
+					
+					plr = players[math.random(1, #players)]
+				else
+					local searched = searchPlayers(args[2])
+				
+					if searched ~= nil then
+						plr = searched
+					else
+						chat("Invalid player!")
+						return
+					end
+				end
+			else
+				plr = game.Players:FindFirstChild(speaker)
+			end
+			
+			followplr = plr
+		end,
+	},
+	jobid = {
+		Name = "jobid",
+		Aliases = {"serverid"},
+		Use = "Returns the current server's Server ID, or Job ID.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			chat(game.JobId)
 		end,
 	},
 	say = {
-		Name = IbLNGtccJjPZ('GSvooukNDPSGyBuhLJbRjTeieJiGyYkoRKKVMvGIGodbqPGmfpnHPQuc2F5'),
-		Aliases = {IbLNGtccJjPZ('EOYoxLKNqmCKEEDIuMbKgKipOUhJODrEQBiTvdParzUnaoiMFRQhPiHY2hhdA==')},
-		Use = IbLNGtccJjPZ('psbBPBXOPbteYuSUwjBNWyhRRGmCschTlAlESzSCTQZbTQALUNeoaUFU2F5cyB0aGUgPG1lc3NhZ2U+IGluIGNoYXQh'),
+		Name = "say",
+		Aliases = {"chat"},
+		Use = "Says the <message> in chat!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local tosay
 			
-			if args[1] == IbLNGtccJjPZ('jHXzkHeyfgAaSvaNytztkORiXHinBhMLyWXCgDGKmHHdabERPahHxhYc2F5') then
+			if args[1] == "say" then
 				tosay = string.sub(msg, 6)
 			else
 				tosay = string.sub(msg, 8)
@@ -263,13 +463,13 @@ commands = {
 			
 			if not speakerplayer then return end
 			
-			if altctrl then chat(tosay) else chat(speakerplayer.DisplayName .. IbLNGtccJjPZ('LaBBfVLhXhINaPASwsliAvpmRpplNoXOPPYanPSZBKoLhUaScfIHPvKOiA=') .. tosay) end
+			if altctrl then chat(tosay) else chat(speakerplayer.DisplayName .. ": " .. tosay) end
 		end,
 	},
 	pick = {
-		Name = IbLNGtccJjPZ('UUPTHHWqvBUfycMPYoAyqAqoqAiSXjuirNRgMMeGEMkRTXAIcPqVKjecGljaw=='),
-		Aliases = {IbLNGtccJjPZ('VfFuUizrHngQZBFUvMYQvQvIkXEHrlcgpedyoZljpjnDTjJDfPZQmwSY2hvb3Nl')},
-		Use = IbLNGtccJjPZ('IvekKyuijOBcuTWpssUSWcQNoEeAPfbLcGbHVozeiXSLItHguHtgSygUGlja3MgYW4gaXRlbSBmcm9tIHRoZSBnaXZlbiBhcmd1bWVudHMu'),
+		Name = "pick",
+		Aliases = {"choose"},
+		Use = "Picks an item from the given arguments.",
 		Enabled = true,
 		CommandFunction = function(msg, args)
 			local choosefrom = {}
@@ -283,101 +483,101 @@ commands = {
 			local chosen = choosefrom[math.random(1, #choosefrom)]
 			
 			if chosen then
-				chat(IbLNGtccJjPZ('GqwxQYQnqWIwKffgdejfVmwoeyYubPMEMomMpZPQvxlyAvJjdGqurzOVm9pZFggY2hvc2U6IA==') .. chosen)
+				chat("VoidX chose: " .. chosen)
 			end
 		end,
 	},
 	dance = {
-		Name = IbLNGtccJjPZ('hJDaneEGDCIkPtPITrONGyZtfWwjpjnPukiVkWTstDpgFEShVVojPaeZGFuY2U='),
+		Name = "dance",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('RfIphtPpQRWUzgGNcPbrzksxDspKPgpZnENyhACrgCfSVkXLZFcbghPTWFrZXMgVm9pZFggZGFuY2Uh'),
+		Use = "Makes VoidX dance!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game:GetService(IbLNGtccJjPZ('MCHZlvMgztMvOOeKpeGgImOflABZJaIUbQksVWRpnKYiuoLSXWVkDUEUGxheWVycw==')):Chat(IbLNGtccJjPZ('vuaYXERzAkcZhimzRvShBMlUzehRbSBnVrYJUKBHjdkJKmwzIsCyFpYL2UgZGFuY2U='))
+			game:GetService("Players"):Chat("/e dance")
 		end,
 	},
 	point = {
-		Name = IbLNGtccJjPZ('lYrFNyesnmFhTvHzskfokrNUyxHubMYIbRtCrowQOfghtzIocoisMLlcG9pbnQ='),
+		Name = "point",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('ajGLOTfhDoLOXtLCcSYXpbXSVxZTsouEitqKtnCJurYoCtQXdfSXlLvTWFrZXMgVm9pZFggcG9pbnQh'),
+		Use = "Makes VoidX point!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game:GetService(IbLNGtccJjPZ('fgSPrntvGxoKtgXzBAgiHpqlyRbakgCfEnKfMXEDSIXBQaKqbTsrdAHUGxheWVycw==')):Chat(IbLNGtccJjPZ('wZQitloOkezSndQknVJXnYVrmfkpQHKyhDjfftOQPeKzogXWIGegOqLL2UgcG9pbnQ='))
+			game:GetService("Players"):Chat("/e point")
 		end,
 	},
 	stadium = {
-		Name = IbLNGtccJjPZ('LbvFmXZMiPoYuQUilwVmbXxolqLmIjXYCWrlMkCxlrnyfsaZtEaTCEkc3RhZGl1bQ=='),
+		Name = "stadium",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('UywxDawZsOHRBkDDaSmfLIcRPNAvXlckMLMXfjdADqMFHnvanxOneDDTWFrZXMgVm9pZFggZG8gdGhlIHN0YWRpdW0gZW1vdGUh'),
+		Use = "Makes VoidX do the stadium emote!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game:GetService(IbLNGtccJjPZ('RkdcbkdzQjNeHugtFwjWFpiIzDBZfgefcNhQoXNOQybXuaiXkfNWwnVUGxheWVycw==')):Chat(IbLNGtccJjPZ('xqLnnZoaWjXqFojVqRVKPvAfmeLUpBLtvWZEtslRYaWEazdQgFLNrFbL2Ugc3RhZGl1bQ=='))
+			game:GetService("Players"):Chat("/e stadium")
 		end,
 	},
 	cheer = {
-		Name = IbLNGtccJjPZ('JjARblMzLyCTswCvYoLOlQUUDQipfLKcPNVLhPAwnLZuaYgvQbtkNraY2hlZXI='),
+		Name = "cheer",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('euwZebZAbkuvxrBOlIlazDVAFlfjkqpxpcmkPVFVBAqmClaSVUsyjBmTWFrZXMgVm9pZFggY2hlZXIh'),
+		Use = "Makes VoidX cheer!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game:GetService(IbLNGtccJjPZ('fsaSZfOPqFmMCkasUIOnabZZPdAbvlLaVGdCRqYnBswVgwHmuTxZaBuUGxheWVycw==')):Chat(IbLNGtccJjPZ('BilnDAhznoYhAcrpaTnNfghuUJoYcJrqRLfeRdEQKvpaLDzKbmJpzCEL2UgY2hlZXI='))
+			game:GetService("Players"):Chat("/e cheer")
 		end,
 	},
 	wave = {
-		Name = IbLNGtccJjPZ('HPoBKqfJAizIjlggbcBIZDGBiJkwlWDalLJZhxxugwSoxqNVNqzabHNd2F2ZQ=='),
+		Name = "wave",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('nFEXNGJLWQsveKnBEtIewNJzrZNFUwbmaTBuFYbbBekuFyRDKOihdYOTWFrZXMgVm9pZFggd2F2ZSE='),
+		Use = "Makes VoidX wave!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game:GetService(IbLNGtccJjPZ('bPIHFChSdIfbDSiFWqvuTgbykMBcVFMPYdhClEFmPsCzCjXHgRDaBsSUGxheWVycw==')):Chat(IbLNGtccJjPZ('gKnqgJzUaPkkQpuNybOpxmykxFZCSQkuGtmnJHPCiNOTqFtcEFTCaWFL2Ugd2F2ZQ=='))
+			game:GetService("Players"):Chat("/e wave")
 		end,
 	},
 	sit = {
-		Name = IbLNGtccJjPZ('KgLEIXTABbhcsSEyJClZjYvEvpDYpQsjFySXVKvsHsnUxXFnoZNjUqVc2l0'),
+		Name = "sit",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('CFvuyxpidaDltjWTVNxyEFpJNEcFPkPZUcFaquKNNHNwkJQrbPfggpGTWFrZXMgVm9pZFggc2l0IQ=='),
+		Use = "Makes VoidX sit!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			bot.Character.Humanoid.Sit = true
 		end,
 	},
 	salute = {
-		Name = IbLNGtccJjPZ('mBdkNcuSbZntShmxdujPBNTXYJDlQUazUGDsnFRfNdWddKpDMvCewPSc2FsdXRl'),
+		Name = "salute",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('cxfHkVGWOdwjXhMVChULPksrWFGYlGBmtArXFuslQLuqLqcJcYBlsxITWFrZXMgVm9pZFggc2FsdXRlIQ=='),
+		Use = "Makes VoidX salute!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
-			game.Players:Chat(IbLNGtccJjPZ('ROIkrLVHtcnKHITxbNLhpqNiLQseZbXZfNXjjpFSbSuQqkDDPaqtusCL2Ugc2FsdXRl'))
+			game.Players:Chat("/e salute")
 		end,
 	},
 	jump = {
-		Name = IbLNGtccJjPZ('BrqPmZOhspIYwojJWqWNqTSIhUhSEdfxRdiMxBOycPGaHuWrDjKogKqanVtcA=='),
+		Name = "jump",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('sDrDyyNxFCggnNiFiNnPjuzQFLKbMGjlLmdRvlHoanEAgexwThyvVEiTWFrZXMgVm9pZFgganVtcCE='),
+		Use = "Makes VoidX jump!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			bot.Character.Humanoid.Jump = true
 		end,
 	},
 	announce = {
-		Name = IbLNGtccJjPZ('MOakafzoVRuHkhmEsstMrJmlXpFkEeNgBVrNDhjbksUGwBDerVYNLtOYW5ub3VuY2U='),
+		Name = "announce",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('oITfFQUevgdQeOxgkTtrYWCvstppObOEWjmgpugfFEYNwOBvMUpmhPrTWFrZXMgYW4gYW5ub3VuY2VtZW50IHZpYSBjaGF0LCBhIG93bmVyLW9ubHkgY29tbWFuZCE='),
+		Use = "Makes an announcement via chat, a owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			if speaker ~= bot.Name then return end
 		
-			chat(IbLNGtccJjPZ('lEAjwtllubShPBRApAWgPKVoaBgWTLXKSUBPOSqujdkSXhitoyOgeoTLS0gQU5OT1VOQ0VNRU5UIC0tIA=='))
+			chat("-- ANNOUNCEMENT -- ")
 			wait()
 			chat(string.sub(msg, 10))
 			wait()
-			chat(IbLNGtccJjPZ('OaJtjsicbRdwHfEtxhKnpyrAGNFcuUCIvZsFOoUQQfIiKKLMpTLIjDwLS0gQU5OT1VOQ0VNRU5UIC0t'))
+			chat("-- ANNOUNCEMENT --")
 		end,
 	},
 	whitelist = {
-		Name = IbLNGtccJjPZ('kkxDqRfHsQltzvfoigwqpqliHBnGtwHBDJSRTiRzLDnKAtiDsmaKsdcd2hpdGVsaXN0'),
-		Aliases = {IbLNGtccJjPZ('eQuFuywWRyNvUmPmxcbMGGeAbrvKkSogpzpTNwkiYOEdlpoRJLzkVeBd2w=')},
-		Use = IbLNGtccJjPZ('XITuMhyXcArZzQXJnNvcwqMdrlNbfmGGwLyQHQiKfJkLUFnXClpFvsdV2hpdGVsaXN0cyBhIHBsYXllciwgbWVhbmluZyB0aGV5IGNhbiB1c2UgTHVuYXJCb3QuIEFuIG93bmVyLW9ubHkgY29tbWFuZCE='),
+		Name = "whitelist",
+		Aliases = {"wl"},
+		Use = "Whitelists a player, meaning they can use LunarBot. An owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local towhitelist = args[2]
@@ -385,35 +585,35 @@ commands = {
 			if speaker ~= bot.Name then return end
 			
 			if towhitelist then
-				if towhitelist == IbLNGtccJjPZ('QvfrnXtAgZXekpyXvPwbrqvefKLYhnPwBRJNEoVNCQEDPmwbcmGSFvrYWxs') then
+				if towhitelist == "all" then
 					for i, player in pairs(game.Players:GetPlayers()) do
 						table.insert(whitelisted, player.Name)
-						local bl = player:FindFirstChild(IbLNGtccJjPZ('pQizQmsGUYayMIPqkImsOAXJQsZKMlXZXaPdROUtdLWLmYLntvlIJSiTHVuYXJCb3RCbGFja2xpc3Q='))
-						if bl then bl:Destroy() else warn(player.DisplayName .. IbLNGtccJjPZ('rSeBzNIErNABADMgwfRhurLqSohJazidfGWjgrWAvfJnjumzwTHQILoIHdhcyBub3QgYmxhY2tsaXN0ZWQh')) end
+						local bl = player:FindFirstChild("LunarBotBlacklist")
+						if bl then bl:Destroy() else warn(player.DisplayName .. " was not blacklisted!") end
 					end
 					
 					allwhitelisted = true
 					
-					chat(IbLNGtccJjPZ('QFcdmLjVtPMdXGkRKkhQwAaxBBusoDDuWJMZOpARIqmsywOqFmXXpaLV2hpdGVsaXN0ZWQgYWxsIHBsYXllcnMgdGhhdCBhcmUgY3VycmVudGx5IGluIHRoZSBnYW1lISBUeXBlIC5jbWRzIHRvIHZpZXcgY29tbWFuZHMu'))
+					chat("Whitelisted all players that are currently in the game! Type .cmds to view commands.")
 				else
 					local plr = searchPlayers(towhitelist)
 					
 					if plr then
 						table.insert(whitelisted, plr.Name)
-						local bl = plr:FindFirstChild(IbLNGtccJjPZ('SVKxeLIyTGoWsVORWkSZcKcyaWNjSZFzIlkcyKjQBGIvwNAjKDbpHmUTHVuYXJCb3RCbGFja2xpc3Q='))
-						if bl then bl:Destroy() else warn(player.DisplayName .. IbLNGtccJjPZ('qMDIazBwhTJRTTaYajuYJGFTSgTWeOnmMxVhNUrbSKkBSGKtcxyceOoIHdhcyBub3QgYmxhY2tsaXN0ZWQh')) end
-						chat(IbLNGtccJjPZ('LdSaRCmEcybAsmKoVwcZJYsGSAWQGxZDAPPFtmmXLwAuCSriehjulFgV2hpdGVsaXN0ZWQg') .. plr.DisplayName .. IbLNGtccJjPZ('UALlhtpoqmRCYaibOHHzbAKHcwUiClXokInfwLjuEtTAvOCQyNSikMLISBUeXBlIC5jbWRzIHRvIHZpZXcgY29tbWFuZHMu'))
+						local bl = plr:FindFirstChild("LunarBotBlacklist")
+						if bl then bl:Destroy() else warn(player.DisplayName .. " was not blacklisted!") end
+						chat("Whitelisted " .. plr.DisplayName .. "! Type .cmds to view commands.")
 					else
-						chat(IbLNGtccJjPZ('GtQvnZniHviTrVmYWHvPvChbqcrTOEDxJQJEVnmGuuQwiVjvBluQUrURmFpbGVkIHRvIHdoaXRlbGlzdCBwbGF5ZXIgLSBVc2VyIG5vdCBmb3VuZCE='))
+						chat("Failed to whitelist player - User not found!")
 					end
 				end
 			end
 		end,
 	},
 	blacklist = {
-		Name = IbLNGtccJjPZ('AMIytikaDCLlntoJdYxgfrSUeEgVrboWkKDQiaOlLwNAjWzCeKaCdwSYmxhY2tsaXN0'),
-		Aliases = {IbLNGtccJjPZ('AMlbwuhSwQRWGEbWnRoQUxphUUqekCwGfrHlvDkMnKyoJPPeJYfEIBmYmw=')},
-		Use = IbLNGtccJjPZ('EKwNNNuteKHqieVvJEpiIwCqnrvChnjAAGllAcrVRxUIMuIQXInqxKpQmxhY2tsaXN0cyBhIHBsYXllciBtZWFuaW5nIHRoZXkgY2Fubm90IHVzZSBMdW5hckJvdC4gT3duZXItb25seSBjb21tYW5kIQ=='),
+		Name = "blacklist",
+		Aliases = {"bl"},
+		Use = "Blacklists a player meaning they cannot use LunarBot. Owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local toblacklist = args[2]
@@ -421,82 +621,139 @@ commands = {
 			if speaker ~= bot.Name then return end
 			
 			if toblacklist then
-				if toblacklist == IbLNGtccJjPZ('jSFSsqlWpIvVqVYSXqCIGHXMmGsbUoPwDSDZbvznCLvInIsLJDjbfgnYWxs') then
+				if toblacklist == "all" then
 					for i, p in pairs(game.Players:GetPlayers()) do
-						local alrbl = p:FindFirstChild(IbLNGtccJjPZ('XrVrcpgdcsvkPBTXmxCzPulwJqajCCYBpjvAkPiAKDEOGFahhlxgbjWTHVuYXJCb3RCbGFja2xpc3Q='))
+						local alrbl = p:FindFirstChild("LunarBotBlacklist")
 						
 						if alrbl then alrbl:Destroy() end
 					
-						local new = Instance.new(IbLNGtccJjPZ('lnyGHsATnsWtOyEILQsUnLqlUwxEINujdkGxDyfTrUPQdQUVfrVUozOQm9vbFZhbHVl'))
+						local new = Instance.new("BoolValue")
 						new.Parent = p
-						new.Name = IbLNGtccJjPZ('caPZnesoABSNiBZkFtutSDZjEImJAzdmwtRftrTXPbWVbTLtXioFZBWTHVuYXJCb3RCbGFja2xpc3Q=')
+						new.Name = "LunarBotBlacklist"
 						new.Value = true
 					end
 					
 					allwhitelisted = false
 					
-					chat(IbLNGtccJjPZ('xirXDEfhffpGfAOAQDyZVowKRySqHYITsppvSUsIqfGKizPjxNyiSDZQmxhY2tsaXN0ZWQgYWxsIHBsYXllcnMgdGhhdCBhcmUgY3VycmVudGx5IGluIHRoZSBnYW1lISBUaGV5IGNhbiBubyBsb25nZXIgcnVuIGNvbW1hbmRzLg=='))
+					chat("Blacklisted all players that are currently in the game! They can no longer run commands.")
 				else
 					local plr = searchPlayers(toblacklist)
 					
 					if plr then
-						local alrbl = plr:FindFirstChild(IbLNGtccJjPZ('ABeuxxNSrQMTguTcNRHjTIAcohmpKnpLVbOwHkBQfedgFGuxnKKUzzYTHVuYXJCb3RCbGFja2xpc3Q='))
+						local alrbl = plr:FindFirstChild("LunarBotBlacklist")
 						
 						if alrbl then alrbl:Destroy() end
 					
-						local new = Instance.new(IbLNGtccJjPZ('vivwqNckDXmMPPBRGAlUPtPjZEmkPBCTUIXRDFWQuAGWCXneZYcjkgwQm9vbFZhbHVl'))
+						local new = Instance.new("BoolValue")
 						new.Parent = plr
-						new.Name = IbLNGtccJjPZ('QVIyvdowBJdszcIexNTznomobMzYelKpjLxpemZWsdUxJZECBFCKmzTTHVuYXJCb3RCbGFja2xpc3Q=')
+						new.Name = "LunarBotBlacklist"
 						new.Value = true
 						alwhitelisted = false
-						chat(IbLNGtccJjPZ('GpkpNTjHyufuvwdRlmRDWMYQtJYJYyuCDzNqbMsNbNpqAOiEQcRUENtQmxhY2tsaXN0ZWQg') .. plr.DisplayName .. IbLNGtccJjPZ('PDmirBYXNixAmqiyYBMooIfSnEPJarMtEHCkMDeBgzRWDioNKNDegHuISBUaGV5IGNhbiBubyBsb25nZXIgcnVuIGNvbW1hbmRzLg=='))
+						chat("Blacklisted " .. plr.DisplayName .. "! They can no longer run commands.")
 					else
-						chat(IbLNGtccJjPZ('NPCeUxomFgrLtcedDEbaLnhcPpQOXEbhxNezSAFRWbtAipZRGmNDllZRmFpbGVkIHRvIGJsYWNrbGlzdCBwbGF5ZXIgLSBVc2VyIG5vdCBmb3VuZCE='))
+						chat("Failed to blacklist player - User not found!")
 					end
 				end
 			end
 		end,
 	},
 	coinflip = {
-		Name = IbLNGtccJjPZ('fCczdbjsilpMBufxSjwwvDbNueGQDdonqLvLNYTojArEazuuNBaaylHY29pbmZsaXA='),
-		Aliases = {IbLNGtccJjPZ('zPaDOFJRStdWxiZWxwXSPwUFgQcIJEGLBserDYtJBwKuNZbWGBrDoAWZmxpcA=='), IbLNGtccJjPZ('OoaEAMZGuDJirumYSdlggWjhaoAWpuYOOkYXmUzlPTYhgjxuQPyrpnnY29pbg==')},
-		Use = IbLNGtccJjPZ('mEpfZEeGhPRaMmQTTtghypGDKnFQdKUBRvBoqCHgfftmGTCZApADzfuRmxpcHMgYSBjb2luIHVzaW5nIGEgcmFuZG9tbHkgZ2VuZXJhdGVkIG51bWJlciBmcm9tIDEgdG8gMi4='),
+		Name = "coinflip",
+		Aliases = {"flip", "coin"},
+		Use = "Flips a coin using a randomly generated number from 1 to 2.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local flipped = math.random(1, 2)
 			
 			if flipped == 1 then
-				chat(IbLNGtccJjPZ('tRnnsuQhcKuvbyaSofIpxwHvYpBzpiPMhVkTAdMJsvVgeHkrgNKyKphSEVBRFMh'))
+				chat("HEADS!")
 			elseif flipped == 2 then
-				chat(IbLNGtccJjPZ('YzenZGDHsWzugwPBEuBpbNEiMWKRAHkUKdBFYeZMfqEzZMuZTKAfzvgVEFJTFMh'))
+				chat("TAILS!")
 			else
-				chat(IbLNGtccJjPZ('WVkiVgoIloZlwAnwfZqDKLxiPsMPqpbKrzGpZudoMRqUAGvxBPOAforV2hvb3BzISBBbiB1bmtub3duIGVycm9yIG9jY3VyZWQgd2hpbGUgZmxpcHBpbmcgdGhlIGNvaW4uIFRoYXQ=')s a bit embarrasing.IbLNGtccJjPZ('cpElCGWOKpsDRBLbXroaleSniZorBQkelMguONcCBAXJJPYPKpYxpxkKQ0KCQkJZW5kDQoJCWVuZCwNCgl9LA0KCXJhbmRvbSA9IHsNCgkJTmFtZSA9IA==')randomIbLNGtccJjPZ('JUSpqKjOpdMKcyZhZNLEgbQIJMBwxnWWeQJxUHkBCxVGbWJCaJujLOKLA0KCQlBbGlhc2VzID0ge30sDQoJCVVzZSA9IA==')Generates a random number between the given numbers!IbLNGtccJjPZ('BSyQUHYjgMaIGgOgCIDzRttNiEKjKtsNaLzyYOPoAvCINbWSGSFtVYELA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJaWYgYXJnc1syXSBhbmQgYXJnc1szXSB0aGVuDQoJCQkJbG9jYWwgcm5kID0gbWF0aC5yYW5kb20odG9udW1iZXIoYXJnc1syXSksIHRvbnVtYmVyKGFyZ3NbM10pKQ0KCQkJCQ0KCQkJCWlmIHJuZCB0aGVuDQoJCQkJCWNoYXQo')VoidX // Generated random number between IbLNGtccJjPZ('YBzppyLYlbEqPWfbTYLBEnccWDdHyYbfePnCXZkxRjHENcRJIgAKLujIC4uIGFyZ3NbMl0gLi4g') and IbLNGtccJjPZ('wmtLOxpbnPpOHIKGVnojGGXttGHsxJNXlapwgGABSqRYgvvxYYGafWSIC4uIGFyZ3NbM10gLi4g'): IbLNGtccJjPZ('ahpivVMUQjXsbHVLwmOSNbrtJqniROCrpTWpAVvxFuoLKLnVYhVwIzbIC4uIHJuZCkNCgkJCQllbHNlDQoJCQkJCWNoYXQo')Aw, snap! An error occured while generating a random number.IbLNGtccJjPZ('uuixcmsKWUmzTCgtBBmpdFKIFGApSPEhiYNYxdpbBUxqawzkskKOYQmKQ0KCQkJCWVuZA0KCQkJZW5kDQoJCWVuZCwNCgl9LA0KCWJyaW5nID0gew0KCQlOYW1lID0g')bringIbLNGtccJjPZ('IBVwtfwFHPBUyZlLXuGeXUwsJYgjwWBIMhyFmWeGfbnZCcudZixAhNlLA0KCQlBbGlhc2VzID0ge30sDQoJCVVzZSA9IA==')Brings VoidX to the player that chatted the command.IbLNGtccJjPZ('GkUjJPdbTjdFvtzziyqAOXnRagMdInLzoHSsoCHJiRIDZQwMWxHPuOOLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHBsciA9IGdhbWUuUGxheWVyczpGaW5kRmlyc3RDaGlsZChzcGVha2VyKQ0KCQkJDQoJCQkJaWYgcGxyIHRoZW4NCgkJCQkJYm90LkNoYXJhY3RlcjpTZXRQcmltYXJ5UGFydENGcmFtZShwbHIuQ2hhcmFjdGVyLkh1bWFub2lkUm9vdFBhcnQuQ0ZyYW1lKQ0KCQkJCWVuZA0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCgljb3B5Y2hhdCA9IHsNCgkJTmFtZSA9IA==')copychatIbLNGtccJjPZ('jXMbjThSvPJDgPSHqYhMQcXiDvkGJxWOyyCEBabNeWlqAlsnFJQwZqxLA0KCQlBbGlhc2VzID0gew==')ccIbLNGtccJjPZ('ETliCnajLJIVINpDtaeGVgsgwnahKpOYGtoHoGvxCONiumGmbGVhwZOLCA=')copycIbLNGtccJjPZ('znzlVxRsxdhdyHBHWKEgRQBxspJMBpwPtdKtjdlZgvfLGokIYhTernhLCA=')cchatIbLNGtccJjPZ('kuSnQYuHSfRQrELEybfWuOOBUUveXABmzKwPtlDsxuHYMCTolyahYgzfSwNCgkJVXNlID0g')Makes VoidX copy everything the given player says.IbLNGtccJjPZ('edtxfyxbzveawqdfxhhIAGGYDyuFFRIHcwXabmGoPaQgXoaIMmhgRFqLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHBsYXllciA9IG5pbA0KCQkJDQoJCQkJaWYgYXJnc1syXSB0aGVuDQoJCQkJCWlmIGFyZ3NbMl0gPT0g')randomIbLNGtccJjPZ('QIDVWFDbqEFJDXnodapffAiyPHQZuoJYnAtFWbBxCnNHazIkqTXovelIHRoZW4NCgkJCQkJCXBsYXllciA9IGdhbWUuUGxheWVyczpHZXRQbGF5ZXJzKClbbWF0aC5yYW5kb20oMSwjZ2FtZS5QbGF5ZXJzOkdldFBsYXllcnMoKSldDQoJCQkJCWVsc2UNCgkJCQkJCXBsYXllciA9IHNlYXJjaFBsYXllcnMoYXJnc1syXSkNCgkJCQkJZW5kDQoJCQkJZWxzZQ0KCQkJCQlwbGF5ZXIgPSBnYW1lLlBsYXllcnM6RmluZEZpcnN0Q2hpbGQoc3BlYWtlcikNCgkJCQllbmQNCgkJCQkNCgkJCQlpZiBwbGF5ZXIgdGhlbg0KCQkJCQljb3B5Y2hhdHBsYXllciA9IHBsYXllcg0KCQkJCQljaGF0KA==')Now copying IbLNGtccJjPZ('nBXWTjLgDKuPzzATKDJpTUToUnocOvWtwbvbSXrkGloYQoCzjCdlTfMIC4uIHBsYXllci5EaXNwbGF5TmFtZSAuLiA=')IbLNGtccJjPZ('IRsddNRwFMOvkktulqknpIzbsLBKGPwFVudZRsYsPsFhzNnfGamrhkxcyBjaGF0IQ=='))
+				chat("Whoops! An unknown error occured while flipping the coin. That's a bit embarrasing.")
+			end
+		end,
+	},
+	random = {
+		Name = "random",
+		Aliases = {},
+		Use = "Generates a random number between the given numbers!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			if args[2] and args[3] then
+				local rnd = math.random(tonumber(args[2]), tonumber(args[3]))
+				
+				if rnd then
+					chat("VoidX // Generated random number between " .. args[2] .. " and " .. args[3] .. ": " .. rnd)
 				else
-					chat(IbLNGtccJjPZ('RtQZFnjdlnlgpouWYXdLpuXjlFMSlXOhQzyWpGyciMUnGjNXYDpHWUzSW52YWxpZCBwbGF5ZXIh'))
+					chat("Aw, snap! An error occured while generating a random number.")
+				end
+			end
+		end,
+	},
+	bring = {
+		Name = "bring",
+		Aliases = {},
+		Use = "Brings VoidX to the player that chatted the command.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local plr = game.Players:FindFirstChild(speaker)
+			
+				if plr then
+					bot.Character:SetPrimaryPartCFrame(plr.Character.HumanoidRootPart.CFrame)
+				end
+			end)
+		end,
+	},
+	copychat = {
+		Name = "copychat",
+		Aliases = {"cc", "copyc", "cchat"},
+		Use = "Makes VoidX copy everything the given player says.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local player = nil
+			
+				if args[2] then
+					if args[2] == "random" then
+						player = game.Players:GetPlayers()[math.random(1,#game.Players:GetPlayers())]
+					else
+						player = searchPlayers(args[2])
+					end
+				else
+					player = game.Players:FindFirstChild(speaker)
+				end
+				
+				if player then
+					copychatplayer = player
+					chat("Now copying " .. player.DisplayName .. "'s chat!")
+				else
+					chat("Invalid player!")
 				end
 			end)
 		end,
 	},
 	uncopychat = {
-		Name = IbLNGtccJjPZ('RACGMkUyMnjdbrhELLBeXYjXkjeuSYoRwVrmztWdjWOWHsmWwKZSoNvdW5jb3B5Y2hhdA=='),
-		Aliases = {IbLNGtccJjPZ('PeogrAPsUDWGrcOJIuNwvYKcNAkZpByaVYcURsNnTDhOBxoGoGgAyxHdW5jYw=='), IbLNGtccJjPZ('oPcBpTuAXlYGthEQNwRYoXFVBXMGJrUnwowNnfvwexKGfPylLGGCzhcdW5jb3B5Yw=='), IbLNGtccJjPZ('CHAOWxqDyERAqUdRvsCJrLsWvFCXtkdIunSbMnZRGeacOwYecHxmPPudW5jY2hhdA==')},
-		Use = IbLNGtccJjPZ('vAMfeoHqkQyExPDdymIKRKgbgxxklEsVPUppRwvHCLbxiaowbzLxbrWTWFrZXMgVm9pZFggc3RvcCBjb3B5aW5nIGV2ZXJ5dGhpbmcgdGhlIGNvcHljaGF0IHBsYXllciBzYXlzLg=='),
+		Name = "uncopychat",
+		Aliases = {"uncc", "uncopyc", "uncchat"},
+		Use = "Makes VoidX stop copying everything the copychat player says.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
 				if copychatplayer then
-					chat(IbLNGtccJjPZ('rQdJlRaugmEujpLVchFbaMiUSRxutyYadDvyChUGRDMeDIQGpEwnyeeU3RvcHBlZCBjb3B5aW5nIA==') .. copychatplayer.DisplayName .. IbLNGtccJjPZ('CDEhFTgudkwgBHmXYoXwgIKMtBrJDGwgrvIqtYAVzAAgpUqcXUKtkoZIQ=='))
+					chat("Stopped copying " .. copychatplayer.DisplayName .. "!")
 					copychatplayer = nil
 				else
-					chat(IbLNGtccJjPZ('GAzhsBHJhRmLBSDmJfLSXgpajtFengMVwmkAGPZzniXdqvmwUBoerCqVm9pZFggaXMgbm90IGNvcHlpbmcgYW55b25lIQ=='))
+					chat("VoidX is not copying anyone!")
 				end
 			end)
 		end,
 	},
 	to = {
-		Name = IbLNGtccJjPZ('kFeNpDJbcdgiduNvYcYhTIKZRtxSwfeRSXQbrvZRgyKauBqWyWgvpHgdG8='),
+		Name = "to",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('vDjWERdzpdesOhhwgJkZHpNmDNTqmMCohpMvrAtEfyOOKClWIszzDdbVGVsZXBvcnRzIFZvaWRYIHRvIHRoZSA8cGxheWVyPiBnaXZlbi4='),
+		Use = "Teleports VoidX to the <player> given.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -504,7 +761,7 @@ commands = {
 			
 				local plr = nil
 				
-				if args[2] == IbLNGtccJjPZ('HbLNDtdnUAsGEdNsZRCOrMcAkkZcjQlgioJyrNkbJpqpEYxiVacybHXcmFuZG9t') then
+				if args[2] == "random" then
 					local players = game.Players:GetPlayers()
 					
 					plr = players[math.random(1, #players)]
@@ -515,15 +772,15 @@ commands = {
 				if plr then
 					bot.Character:SetPrimaryPartCFrame(plr.Character.HumanoidRootPart.CFrame)
 				else
-					chat(IbLNGtccJjPZ('yHhjtKSzTlnQZxEvBayIFAzPvhCkeDJuFZyqcBgWGxJTkZyEmYPsKojSW52YWxpZCBwbGF5ZXIh'))
+					chat("Invalid player!")
 				end
 			end)
 		end,
 	},
 	walkto = {
-		Name = IbLNGtccJjPZ('jrQeLnGjlnseYqktUWiBtvTsiXsbHFntysRtZJUjAeyxMWFkFSxFZsQd2Fsa3Rv'),
-		Aliases = {IbLNGtccJjPZ('ewrLEfphIBTxVgUypIUrfgdxtvgLBOTUJUDPUQDzFwPjqdHnxnSWbuJY29tZQ==')},
-		Use = IbLNGtccJjPZ('DKqNvcBiuAqoUPFopzvdmhNNYoSlyRCeimAdACenLATewpwLtUVVsFtTWFrZXMgTHVuYXJCb3Qgd2FsayB0byB5b3Ugb3IgdGhlIGdpdmVuIHBsYXllciE='),
+		Name = "walkto",
+		Aliases = {"come"},
+		Use = "Makes LunarBot walk to you or the given player!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -531,45 +788,45 @@ commands = {
 				
 				if not args[2] then plr = game.Players:FindFirstChild(speaker) end
 				
-				if args[2] and args[2] == IbLNGtccJjPZ('ulJsvRlMYHIkufkaUhoXKdtWPLllJVWEIYwZdjcWecaWlFmOAlBcGcUcmFuZG9t') then
+				if args[2] and args[2] == "random" then
 					plr = game.Players:GetPlayers()[math.random(1,#game.Players:GetPlayers())]
 				elseif args[2] then
 					plr = searchPlayers(args[2])
 				end
 			
-				if plr and plr:IsA(IbLNGtccJjPZ('UEFNXAGWbCzekxKsIqBVGcRumTjmhkcoyYfkZlquCFhHPTyUDjwuIgmUGxheWVy')) then
+				if plr and plr:IsA("Player") then
 					bot.Character.Humanoid:MoveTo(plr.Character.HumanoidRootPart.Position)
 				else
-					chat(IbLNGtccJjPZ('hzAyTHNaWRehrRdGRhkyUEPAtdOXJJsIZcNNrqCQqwiisumFnxeAowUQ291bGQgbm90IGZpbmQgcGxheWVyIQ=='))
+					chat("Could not find player!")
 				end
 			end)
 		end,
 	},
 	setprefix = {
-		Name = IbLNGtccJjPZ('OKoXDUlYSVEHhXEasjzUugChpnXbMtMoLaWgHReVYkllYzxionYudOcc2V0cHJlZml4'),
-		Aliases = {IbLNGtccJjPZ('nlBKpeYbuBKcDUPgfgHYKlaRguFymTrvnjncrTLXUgZfksUqvyMzKQqcHJlZml4')},
-		Use = IbLNGtccJjPZ('nstdJKyjNBjOHcaMMXcceexXeWniNQLyYrvVQFtYUhHfOjIWyZUHbFJU2V0cyB0aGUgcHJlZml4IG9mIEx1bmFyQm90ISBPd25lci1vbmx5IGNvbW1hbmQh'),
+		Name = "setprefix",
+		Aliases = {"prefix"},
+		Use = "Sets the prefix of LunarBot! Owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
 				if not args[2] then return end
 			
 				if speaker == bot.Name then
-					if args[2] == IbLNGtccJjPZ('jlxCsdpBRCtyeXDAtUEtulDNkCgLDOQzzlhWJErTqdhknXdgNFLpZrAIw==') then return end
-					if string.len(args[2]) >= 2 then chat(IbLNGtccJjPZ('ARyOATjpYVUaRldqHlFhJPQDTOCmJBihwzRPETKdeaiIHoESgazeIjhTWF4aW11bSBwcmVmaXggbGVuZ3RoIGlzIDEgY2hhcmFjdGVyIQ==')) return end
+					if args[2] == "#" then return end
+					if string.len(args[2]) >= 2 then chat("Maximum prefix length is 1 character!") return end
 				
 					prefix = args[2]
-					chat(IbLNGtccJjPZ('xmiwhWRnTfjtMtZBOkkYSJMGGhHeclLfKPalQxaEKoeZjLAytYRgjDsU3VjY2Vzc2Z1bGx5IHNldCBwcmVmaXggdG8g')IbLNGtccJjPZ('iXOYCGBdgOpOtldbQcqGbxLIjimMYjmyXLlcqeKeVmeneeUBGNHQVWTIC4uIHByZWZpeCAuLiA=')IbLNGtccJjPZ('BhVfBRWpvBPCtsMIcKAFoFeGDIbbyZclyvbSOwrCyACYlLtPQlqNjUVIQ=='))
+					chat("Successfully set prefix to '" .. prefix .. "'!")
 				else
-					chat(IbLNGtccJjPZ('LfJSXXDBuexOaVjRxIAxyHspLUdANZXPluHhfItgTaSPhMnyKGpiJrJWW91IGRvIG5vdCBoYXZlIHRoZSBwZXJtaXNzaW9ucyB0byBydW4gLnNldHByZWZpeCE='))
+					chat("You do not have the permissions to run .setprefix!")
 				end
 			end)
 		end,
 	},
 	setstatus = {
-		Name = IbLNGtccJjPZ('lxEoZzcoZHwuAXzfeiZzTGPkINZTCdPkPdizHfLzbBLSjcCQohPuRFoc2V0c3RhdHVz'),
+		Name = "setstatus",
 		Aliases = {},
-		Use = IbLNGtccJjPZ('XRHXffWarOZMyMaVfmcGFHSnuuikFLIrFBbTARppBfxKoQnsCccxBTaU2V0cyB0aGUgc3RhdHVzIG9mIEx1bmFyQm90LiBXaGVuIGEgc3RhdHVzIGlzIHNldCwgdGhlIGJvdCB3aWxsIG5vIGxvbmdlciB0YWtlIGNvbW1hbmRzLg=='),
+		Use = "Sets the status of LunarBot. When a status is set, the bot will no longer take commands.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -577,46 +834,473 @@ commands = {
 			
 				if speaker == bot.Name then
 					status = string.sub(msg, 12)
-					chat(IbLNGtccJjPZ('ulVCFCBiTvqbyWJtCWTYbHnYErbpgaxwxCwHTZWomaOpCDONIRzSvFOU3VjY2Vzc2Z1bGx5IHNldCBzdGF0dXMgdG8g')IbLNGtccJjPZ('dAsgwImMSnHUvocuFLhmEGSMdDTmEHeOjtHAYhGLQkdZLnrXejcGPCLIC4uIHN0YXR1cyAuLiA=')IbLNGtccJjPZ('OzYFNmlIwJYCCUEHepIBiIUBaXICnBtsiwsahDcVpCgZVSShMiyyBqZIQ=='))
+					chat("Successfully set status to '" .. status .. "'!")
 				else
-					chat(IbLNGtccJjPZ('eAVLmlsEgcrwKvzBpwnRPqvKTMlVSFmDvIYmaALusBAcDolzYtvqPIGWW91IGRvIG5vdCBoYXZlIHRoZSBwZXJtaXNzaW9ucyB0byBydW4gLnNldHN0YXR1cyE='))
+					chat("You do not have the permissions to run .setstatus!")
 				end
 			end)
 		end,
 	},
 	clearstatus = {
-		Name = IbLNGtccJjPZ('tkfeywliEowQCUNTvfQGPKiaxlziGWaFKTnNHckLRylUQWLHJnpYqceY2xlYXJzdGF0dXM='),
-		Aliases = {IbLNGtccJjPZ('OpeadpQlIwwSZKJlZbvMspWzTKHnrPrEtMqREGajvpnhRyLvODBvkoKbm9zdGF0dXM=')},
-		Use = IbLNGtccJjPZ('amMbANLHxxuFxBeIjtgEBdBeoIIixLWuZRDhOtPrTuGhZVAgqPLSfKMQ2xlYXJzIHRoZSBzdGF0dXMgYW5kIGFsbG93cyB0aGUgYm90IHRvIHRha2UgY29tbWFuZHMgYWdhaW4h'),
+		Name = "clearstatus",
+		Aliases = {"nostatus"},
+		Use = "Clears the status and allows the bot to take commands again!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
 				if speaker == bot.Name then
 					status = nil
-					chat(IbLNGtccJjPZ('FKOzsBnkWjuWMBIVEVAtwetgVnTtiCapVlJRdpYEobOkIVxcqBgzHOtU3VjY2Vzc2Z1bGx5IGNsZWFyZWQgc3RhdHVzIQ=='))
+					chat("Successfully cleared status!")
 				else
-					chat(IbLNGtccJjPZ('bLcExhrsrIOmukJMwNePaxBBYfUdXNwBklELgvtThvWOcQZAfhItERbWW91IGRvIG5vdCBoYXZlIHRoZSBwZXJtaXNzaW9ucyB0byBydW4gLmNsZWFyc3RhdHVzIQ=='))
+					chat("You do not have the permissions to run .clearstatus!")
 				end
 			end)
 		end,
 	},
 	funfact = {
-		Name = IbLNGtccJjPZ('mQdBOPyFVuTPzALaPHdSrNYsQDgUYbcixeGyuqBfgNRSCelTgizVJgWZnVuZmFjdA=='),
-		Aliases = {IbLNGtccJjPZ('PWrvZUbLyCzFDlkcWFwWxXcwrVcXTriQcHGUMCxcGuNakFvkYBTBDGEZmFjdA=='), IbLNGtccJjPZ('jJpIFwLYExMmceZMYtbLsMDUVzDuEPciieSeNalwthbTNUlMDUTaKtncmFuZG9tZmFjdA==')},
-		Use = IbLNGtccJjPZ('FOOZnDYUDeEafpZAHrRXuekFoCkaYQptPKdLnQVxcuIzPwrSblXPdjiR2l2ZXMgeW91IGEgcmFuZG9tIGZ1biBmYWN0IQ=='),
+		Name = "funfact",
+		Aliases = {"fact", "randomfact"},
+		Use = "Gives you a random fun fact!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
 				local rnd = funfacts[math.random(1, #funfacts)]
 				
-				chat(IbLNGtccJjPZ('zqpHuyZefbmZtvHBvUQyAbqwRWFWPxrhngRKmQukFZrtrTGrpzLqGJtRnVuIEZhY3Q6IA==') .. rnd)
+				chat("Fun Fact: " .. rnd)
 			end)
 		end,
 	},
 	time = {
-		Name = IbLNGtccJjPZ('hBbNtLPODDTbmOiwMyfgzLrbgBqMJLqiuBUXUdLIkvMSxedNLsVUnXidGltZQ=='),
-		Aliases = {IbLNGtccJjPZ('twIhxFPwYvYGYVvPmZAlsXOaDMqSYzfihJiIhcKScMIpHEHLTpgIHzvY3VycmVudHRpbWU=')},
-		Use = IbLNGtccJjPZ('BczOljaALyAmuYKNckQmIPPpSvYoIvAZneaHukSEdzbqTVUaUqEMhWSR2l2ZXMgeW91IEx1bmFyQm90')s current time in its timezone.IbLNGtccJjPZ('aROdHPNOoVpaZzMVlZZTrJgRVsSQNrnxcZuRNOfNwPuXLadXqtquvALLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWNoYXQo')VoidX current time is: IbLNGtccJjPZ('dbPgxbLIofmhBgHrQqFzkRZjcKWQUUJstkQfMQRcHbwspknLQtkefkgIC4uIG9zLmRhdGUo')%I:%M:%S %pIbLNGtccJjPZ('LDKdfODZSTlCuukzjYiYNEEAdVKpecdYntVzRhyGzsoypyYbhwzMUOjKSkNCgkJCWVuZCkNCgkJZW5kLA0KCX0sDQoJcmlja3JvbGwgPSB7DQoJCU5hbWUgPSA=')rickrollIbLNGtccJjPZ('gPiiIrexsNsbvMhenbHXoBOvvYBSkIDbpCuIjafHvoAUBsdTFsztExVLA0KCQlBbGlhc2VzID0gew==')rickIbLNGtccJjPZ('fRkTCUfNrXkBIOMVYFCJvrHZejBgdiwJlKGTHSHJmXJiUKJatwuNbYSLCA=')rollIbLNGtccJjPZ('RDCujtHwFXejODaHKXCFqBGvblWgNSbhGIKAEBWIuAPItWEOBXitwAZLCA=')rrIbLNGtccJjPZ('MkZmmyzMCASeWBpFQveixCzuHdCJxsoEpUOSZeWqJHnfCeNxQAEOjQDfSwNCgkJVXNlID0g')Rickrolls the chat!IbLNGtccJjPZ('wXhpsTETAmvzTsOgNXUesKkiSKjlFxZDgTunchLNZKyuPNVaFzFsEygLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCXRhc2suc3Bhd24oZnVuY3Rpb24oKQ0KCQkJCQlyaWNrcm9sbGluZyA9IHRydWUNCgkJCQkJY2hhdCg=')Never gonna give you up!IbLNGtccJjPZ('FPBYzKooknFJgDDIMZEdlmeMItgpyEOuvcHTKBdkJhlrWSSbYZqRuREKQ0KCQkJCQl3YWl0KDEpDQoJCQkJCWNoYXQo')Never gonna let you down!IbLNGtccJjPZ('XGSczOahCTZHVjhJfaWwYVSIhNxtvGIebCrAJgoOGOkRqsuIrsfrUoMKQ0KCQkJCQl3YWl0KDEpDQoJCQkJCWNoYXQo')Never gonna run around, andIbLNGtccJjPZ('CyGiqQHiZkcqAfqoqAYMVrtsNrtYtocQcvoJBCwSpPLQQSyPCMPCRgDKQ0KCQkJCQl3YWl0KDEpDQoJCQkJCWNoYXQo')Desert you!IbLNGtccJjPZ('BcSXaacftazhScDgWNlVLWIiHCoyaaUTRkqfKAHpGPrMtkBRItRhsbpKQ0KCQkJCQlyaWNrcm9sbGluZyA9IGZhbHNlDQoJCQkJZW5kKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCgl3YWxrc3BlZWQgPSB7DQoJCU5hbWUgPSA=')walkspeedIbLNGtccJjPZ('YdFDKpDubaFGWgdsKXjLMmwIAfbipdCnUkbFevwViroDIXhylpSlyxgLA0KCQlBbGlhc2VzID0gew==')speedIbLNGtccJjPZ('eUsNymhxdTKLrXBQAlIYNphLDmirCGHnVzqXJOvfqoSXHCJofasxFaGfSwNCgkJVXNlID0g')Sets VoidX walkspeed to <speed>!IbLNGtccJjPZ('fksQTkepEqcLekPnuGnSzOBVXRArDUMaDWzSoBsxjBnSFXwINIKcTMkLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWlmIG5vdCBhcmdzWzJdIHRoZW4gcmV0dXJuIGVuZA0KCQkJCWlmIG5vdCB0b251bWJlcihhcmdzWzJdKSB0aGVuIHJldHVybiBlbmQNCgkJCQkNCgkJCQlpZiB0b251bWJlcihhcmdzWzJdKSA+IDEwMDAgdGhlbg0KCQkJCQljaGF0KA==')Whoops! That speed is over the speed limit of 1000.IbLNGtccJjPZ('JWzrUHpzpFKUVkTUcuXKRYgUgfovPUtYMBHkpqYYTcKllPdBcqIuhzqKQ0KCQkJCQlyZXR1cm4NCgkJCQllbmQNCgkJCQ0KCQkJCWJvdC5DaGFyYWN0ZXIuSHVtYW5vaWQuV2Fsa1NwZWVkID0gdG9udW1iZXIoYXJnc1syXSkNCgkJCQkNCgkJCQljaGF0KA==')Changed walkspeed to IbLNGtccJjPZ('KjHlVLvdZaCNKhvEMRVLmcBPrEdPoPvvWSrSAzhLOzKehLlBBaLPngPIC4uIGFyZ3NbMl0gLi4g')!IbLNGtccJjPZ('RpMmRrLJKHwnELFCRwHxGmBKGwDwGakgDcuUzHEWSgpsWadfDheAXrbKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCglmcHMgPSB7DQoJCU5hbWUgPSA=')fpsIbLNGtccJjPZ('MENZqshnEZxpyUuvNSpytelRXcgapaIpoWppicONokVnTVLpJTKnefELA0KCQlBbGlhc2VzID0ge30sDQoJCVVzZSA9IA==')Chats VoidX current FPS!IbLNGtccJjPZ('fSoRYawkSkvXIQpaLBxgrpAEHCixJckDLAqfhwsrnULGwGNWIDbLALSLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWNoYXQo')VoidX FPS is: IbLNGtccJjPZ('fKncJeBJFKyMAvuUCGzgXzNPhbpysLkARTscVEWnMrrSVDFiNCvMaNEIC4uIHRvc3RyaW5nKG1hdGgucm91bmQoZ2FtZS5Xb3Jrc3BhY2U6R2V0UmVhbFBoeXNpY3NGUFMoKSkpKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCgltYXRoID0gew0KCQlOYW1lID0g')mathIbLNGtccJjPZ('UVGKMfHVvzVPWXMhjTHyQBWfDSglZprTXbRIJoiNaDPLoDkHHvqRNmjLA0KCQlBbGlhc2VzID0ge30sDQoJCVVzZSA9IA==')Does <operation> on arguments.IbLNGtccJjPZ('nSYWRrUrbcnSxzXVyyxxhZrwqeJZjmiespbLgpKUzLBDsCLGDckMGeILA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWlmIG5vdCBhcmdzWzJdIHRoZW4gcmV0dXJuIGVuZA0KCQkJCWlmIG5vdCBhcmdzWzNdIHRoZW4gcmV0dXJuIGVuZA0KCQkJCWlmIG5vdCBhcmdzWzRdIHRoZW4gcmV0dXJuIGVuZA0KCQkJCQ0KCQkJCWxvY2FsIG9wZXJhdGlvbnMgPSB7DQoJCQkJCQ==')addIbLNGtccJjPZ('YWVNklxALLSIbUlkssJiDVPoFBuEbDnsFlHfvHvFVzgOzvRKvJKBzeOLA0KCQkJCQk=')subtractIbLNGtccJjPZ('enxnoARTSeszmxqJaBfXOroNnIfDAFfBvhDrzfOYJiyzJJtColdaYReLA0KCQkJCQk=')multiplyIbLNGtccJjPZ('SrwXlzXCCcapKAqhzgTRbiPUonxfOBnnyZDoLNWOFzXsMYTjqzgiQnSLA0KCQkJCQk=')divideIbLNGtccJjPZ('odMOlqoAGVucTeNbsuYAgKnljzWVZExqnMCYhFhWZkgMCiDqlsADqyWDQoJCQkJfQ0KCQkJCQ0KCQkJCWxvY2FsIG9wZXJhdGlvbiA9IGFyZ3NbMl0NCgkJCQkNCgkJCQlpZiBub3QgdGFibGUuZmluZChvcGVyYXRpb25zLCBvcGVyYXRpb24pIHRoZW4NCgkJCQkJY2hhdCg=')Invalid operation!IbLNGtccJjPZ('hCelShYAIXwCJBTRYmcUrVVizsuWsIEUjrkRdZRBLOLycLXlKlgLUhSKQ0KCQkJCQlyZXR1cm4NCgkJCQllbmQNCgkJCQkNCgkJCQlsb2NhbCByZXN1bHQNCgkJCQkNCgkJCQlsb2NhbCBudW1zID0ge30NCgkJCQkNCgkJCQlmb3IgaSwgYXJnIGluIHBhaXJzKGFyZ3MpIGRvDQoJCQkJCWlmIGkgPiAyIHRoZW4NCgkJCQkJCWlmIHRvbnVtYmVyKGFyZykgdGhlbg0KCQkJCQkJCXRhYmxlLmluc2VydChudW1zLCB0b251bWJlcihhcmcpKQ0KCQkJCQkJZWxzZQ0KCQkJCQkJCWNoYXQo')Attempt to do math on unknown characters!IbLNGtccJjPZ('kghxEvDMzsqYbyBLgnEPUZoSvaCdnZwtCjWpbdRteORarLFXnLiRcVlKQ0KCQkJCQkJCXJldHVybgkNCgkJCQkJCWVuZA0KCQkJCQllbmQNCgkJCQllbmQNCgkJCQkNCgkJCQlmb3IgaSwgbnVtIGluIHBhaXJzKG51bXMpIGRvDQoJCQkJCWlmIGkgPT0gMSB0aGVuDQoJCQkJCQlyZXN1bHQgPSBudW0NCgkJCQkJZWxzZQ0KCQkJCQkJaWYgb3BlcmF0aW9uID09IA==')addIbLNGtccJjPZ('dCQYrVxHCteTFkZUoFhlvaqjdHtInhjMYXPdNWJGgDSNhSXaCOJqFNpIHRoZW4NCgkJCQkJCQlyZXN1bHQgPSByZXN1bHQgKyBudW0NCgkJCQkJCWVsc2VpZiBvcGVyYXRpb24gPT0g')subtractIbLNGtccJjPZ('YgcXCGfwgxiIeFaDHzodHooMxChFzvDPoIuITgqLdGzevsYNcfxAPuVIHRoZW4NCgkJCQkJCQlyZXN1bHQgPSByZXN1bHQgLSBudW0NCgkJCQkJCWVsc2VpZiBvcGVyYXRpb24gPT0g')divideIbLNGtccJjPZ('SUYOTtfIrGkgpvsAPNCefCyYvLcPClzvjwMOIUXTeohfkMNtuLcJfwTIHRoZW4NCgkJCQkJCQlyZXN1bHQgPSByZXN1bHQgLyBudW0NCgkJCQkJCWVsc2VpZiBvcGVyYXRpb24gPT0g')multiplyIbLNGtccJjPZ('igIoPlfPzInaKAAYvUYnPrHievrNBlTJCtfTfuHECcNfFGGklvPXRIzIHRoZW4NCgkJCQkJCQlyZXN1bHQgPSByZXN1bHQgKiBudW0NCgkJCQkJCWVuZA0KCQkJCQllbmQNCgkJCQllbmQNCgkJCQkNCgkJCQljaGF0KA==')Result: IbLNGtccJjPZ('uvpcoRdEZCvuTdjzIUwaaGrFbojVMjUOOVkCWnkObnDFmolcZcYhgNNIC4uIHRvc3RyaW5nKHJlc3VsdCkpDQoJCQllbmQpDQoJCWVuZCwNCgl9LA0KCWRpc2FibGVjb21tYW5kID0gew0KCQlOYW1lID0g')disablecommandIbLNGtccJjPZ('TAaHqGOeuZELSoJYuzyhRmsvDTEcsNjIwhbiXcIadcjQDfozPnAofEbLA0KCQlBbGlhc2VzID0gew==')disablecmdIbLNGtccJjPZ('VkZqUZCfoBxoYyUnTsMstfTRBdvevTLYFaBdYAFUtIcOXbfzCvHXOYELCA=')cmddisableIbLNGtccJjPZ('atSxWntWXKKzNMKnvIwVJMYleHNHOkAZYlzsLpIjtnlscGaniPxrPJKfSwNCgkJVXNlID0g')Disables the specified command. Owner-only command!IbLNGtccJjPZ('YiVteHNAmKlkhdoTogJlqslaVGRSXbNLKOIToMxsbHoiWvdKYPGEewALA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWlmIG5vdCBzcGVha2VyID09IGJvdC5OYW1lIHRoZW4gY2hhdCg=')You do not have permission to disable this command.IbLNGtccJjPZ('JeKzjPDiTfVUpmCHfSPUUGSOfdVUXOsTIEVEXOhMeiwsdQXbbFrAwRDKSByZXR1cm4gZW5kDQoJCQkNCgkJCQlpZiBub3QgYXJnc1syXSB0aGVuIHJldHVybiBlbmQNCgkJCQ0KCQkJCWxvY2FsIGNtZCA9IGNoZWNrQ29tbWFuZHMoYXJnc1syXSkNCgkJCQ0KCQkJCWlmIG5vdCBjbWQgdGhlbg0KCQkJCQljaGF0KA==')Invalid command!IbLNGtccJjPZ('EiYeOuRZweCMqjveONxKYJCkijcnUuJyzaTbHyREScHWaAMCukqSybEKQ0KCQkJCQlyZXR1cm4NCgkJCQllbmQNCgkJCQkNCgkJCQljbWQuRW5hYmxlZCA9IGZhbHNlDQoJCQkJY2hhdCg=')Disabled command: IbLNGtccJjPZ('gnJzlQxNopUbsWcKASKONwheNguUKrqPaTCicohdAYQjQFtjvYvLPOnIC4uIGNtZC5OYW1lIC4uIA==')!IbLNGtccJjPZ('PCAKBbYUCkfrGASCzkTzvcnFCbrjNofrgiycjNpSlbdqmYBNKWlzkbJKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCgllbmFibGVjb21tYW5kID0gew0KCQlOYW1lID0g')enablecommandIbLNGtccJjPZ('JXIMBeATJGlFrqLeFnthQAVQhSbYozZKhuipEcIttLWKNNNFHdEgubZLA0KCQlBbGlhc2VzID0gew==')enablecmdIbLNGtccJjPZ('hMTCxvfydOMNOLEEAkuwPNxjwaaicxSuMiPRFqLscfzRpDhxPsbnsHdLCA=')cmdenableIbLNGtccJjPZ('JrIKTUtzEsQQQlLvpnlCnehdSvSLdxpirsKAgwMEzLiaINIZEllPkETfSwNCgkJVXNlID0g')Enables the specified command! Owner-only command!IbLNGtccJjPZ('DVfUWiWFguMMZQdpwaCksOriDbDIKfoEMRgVAHnfgxlYEtFNdFPpLVTLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWlmIG5vdCBzcGVha2VyID09IGJvdC5OYW1lIHRoZW4gY2hhdCg=')You do not have permission to disable this command.IbLNGtccJjPZ('eQUZDtqRaQrggZxdNMioZloCOjPUfjYASWXHuChdkADaLiGogfbrKVcKSByZXR1cm4gZW5kDQoJCQkNCgkJCQlpZiBub3QgYXJnc1syXSB0aGVuIHJldHVybiBlbmQNCgkJCQ0KCQkJCWxvY2FsIGNtZCA9IGNoZWNrQ29tbWFuZHMoYXJnc1syXSkNCgkJCQ0KCQkJCWlmIG5vdCBjbWQgdGhlbg0KCQkJCQljaGF0KA==')Invalid command!IbLNGtccJjPZ('TwqAedRVTUsHACPfDxaRmKTKDokUVVTzMxdaalkLKHFAPpevXNIhLctKQ0KCQkJCQlyZXR1cm4NCgkJCQllbmQNCgkJCQkNCgkJCQljbWQuRW5hYmxlZCA9IHRydWUNCgkJCQljaGF0KA==')Enabled command: IbLNGtccJjPZ('dPvYIninSXXzoOuIFUWMzhKvGQgBFIpRMUinJtoXypfEYcAYgtsjanjIC4uIGNtZC5OYW1lIC4uIA==')!IbLNGtccJjPZ('mOycBLwEIotekrTLJxsFvmdGGYkslpwgjRXhlaMdGiqeFoJRFFNvjnGKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCglyYW5kb21wbGF5ZXIgPSB7DQoJCU5hbWUgPSA=')randomplayerIbLNGtccJjPZ('fLmNjPfJamSDjPqRlaNZsDZWeEfrVbMFWxnYAgyCSygCUJJkVTFfvagLA0KCQlBbGlhc2VzID0gew==')rndplayerIbLNGtccJjPZ('bYXcrVzlIDSnNnUCMFuqkhJVHnFOeUMdsVszjaNkLsAnNKnMckzDxpRLCA=')randomplrIbLNGtccJjPZ('hGCupIQRotcAxLrrqWHoKSktuqRnJBawNCcgyEoHYuzZXUZkgtmGrgxLCA=')playerIbLNGtccJjPZ('BHmcRGxYzvHHUFJbVpVFkGJXNEmbSvaMrTStuAuQXwOEmpVcQcngyZWfSwNCgkJVXNlID0g')Gets a random player that is currently in the server and chats their display name!IbLNGtccJjPZ('TEWWVrWlxieBSLPsbDTIcTKGTYEuSrEzbbZkWqyDyScyuugavvjxtVRLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHJuZCA9IGdhbWUuUGxheWVyczpHZXRQbGF5ZXJzKClbbWF0aC5yYW5kb20oMSwjZ2FtZS5QbGF5ZXJzOkdldFBsYXllcnMoKSldDQoJCQkJDQoJCQkJaWYgcm5kIHRoZW4NCgkJCQkJY2hhdCg=')Random player: IbLNGtccJjPZ('BCrEsmnXvIqvXEDZjTZcBqrgLpLsnYYCKdNgzoHuiUesklTaRySOGQHIC4uIHJuZC5EaXNwbGF5TmFtZSkNCgkJCQllbmQNCgkJCWVuZCkNCgkJZW5kLA0KCX0sDQoJcmFuZG9tbW92ZSA9IHsNCgkJTmFtZSA9IA==')randommoveIbLNGtccJjPZ('JdMvXFeMnscrqbBUxxtNJMyGBhUZkcNuxBKRAgsfdPmmIlHAoYGIkxLLA0KCQlBbGlhc2VzID0gew==')rndmoveIbLNGtccJjPZ('ygPihKJgrMPNJnDNoeBwBNApwApudsOxttAryewLZfstNxYIirLUBlmLCA=')autowalkIbLNGtccJjPZ('xbskCFXfpNFXBpSAzCLJBEXWeXSYGblobJVcoJhLhvbKsLAaFvMAXXKfSwNCgkJVXNlID0g')Toggles VoidX Bot random movement feature!IbLNGtccJjPZ('qCRyjVniYONRPrzWoHatxMwgnFCiuGVeryzyXiBhqUVEKheLdiocAmsLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCXJhbmRvbW1vdmUgPSBub3QgcmFuZG9tbW92ZQ0KCQkJCQ0KCQkJCWlmIHJhbmRvbW1vdmUgPT0gdHJ1ZSB0aGVuDQoJCQkJCWNoYXQo')Enabled random move!IbLNGtccJjPZ('IHibkktJSWhkKFKBRmpxNATjgDQRQFoSXIVCWCSwsdOpChjOemHXJlsKQ0KCQkJCWVsc2UNCgkJCQkJY2hhdCg=')Disabled random move!IbLNGtccJjPZ('hPxHELNNRqPaqHkhmqEzMJlLfomGDGuxXFSmkFOxFPnuMRlwDvArlsYKQ0KCQkJCWVuZA0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCglydXNoID0gew0KCQlOYW1lID0g')rushIbLNGtccJjPZ('inJsFyAPIneNHBtkUXvXrzvVNiONQUZMBZyfWsHgGViqpWJABwejoAXLA0KCQlBbGlhc2VzID0gew==')rushbeginIbLNGtccJjPZ('xdfvvnyzSkLndTpescXJelLabKMNETzbLjKnYTLngUiRggSgGAtZLrNfSwNCgkJVXNlID0g')Makes VoidX turn into Rush from DOORS!IbLNGtccJjPZ('gTNPAJoEecjmrtTQfeRmnFcRjiTlNgszepurXLhSruQcXpEktwUgLavLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWlmIHJ1c2hpbmcgPT0gdHJ1ZSB0aGVuIHJldHVybiBlbmQNCgkJCQlydXNoaW5nID0gdHJ1ZQ0KCQkJCWNoYXQo')-lights flicker-IbLNGtccJjPZ('HsjaGjRcbZHMSkCzECYGByGUXkRbkIhvDynYpJVZmmrNndlgsHnqkURKQ0KCQkJCWxvY2FsIG9yaWdpbiA9IGJvdC5DaGFyYWN0ZXIuSHVtYW5vaWRSb290UGFydC5Qb3NpdGlvbg0KCQkJCWxvY2FsIHN0YXJ0cG9zID0gYm90LkNoYXJhY3Rlci5IdW1hbm9pZFJvb3RQYXJ0LlBvc2l0aW9uIC0gVmVjdG9yMy5uZXcoLTE1MCwgMCwgMCkNCgkJCQlib3QuQ2hhcmFjdGVyOlNldFByaW1hcnlQYXJ0Q0ZyYW1lKENGcmFtZS5uZXcoc3RhcnRwb3MpKQ0KCQkJCXdhaXQoMS41KQ0KCQkJCWNoYXQo')-rush sounds-IbLNGtccJjPZ('mYEOMHVUTmsedpMJkJIpuuWztBqAfSwgDoqJNhpQllwiDjIWxmozkJGKQ0KCQkJCWxvY2FsIG1vdmV0d2VlbiA9IFRTOkNyZWF0ZShib3QuQ2hhcmFjdGVyLkh1bWFub2lkUm9vdFBhcnQsIFRJLCB7Q0ZyYW1lID0gQ0ZyYW1lLm5ldyhvcmlnaW4pfSkNCgkJCQltb3ZldHdlZW46UGxheSgpDQoJCQkJbW92ZXR3ZWVuLkNvbXBsZXRlZDpXYWl0KCkNCgkJCQljaGF0KA==')-rush screams-IbLNGtccJjPZ('VUzMKECIGzijCPXBwmnfevbvNnRLfSVkebjSluGziTmRJjWBtnRNvsOKQ0KCQkJCXdhaXQoMTApDQoJCQkJcnVzaGluZyA9IGZhbHNlDQoJCQllbmQpDQoJCWVuZCwNCgl9LA0KCWFsdGNvbnRyb2wgPSB7DQoJCU5hbWUgPSA=')altcontrolIbLNGtccJjPZ('GFmRYvIBIWVWTBjunTZRloaBLdKkWasYJtLMkqzyWcnRRNVTmCWzVBCLA0KCQlBbGlhc2VzID0gew==')altctrlIbLNGtccJjPZ('MgsfBjjFChfqaBmXdgZzOWGLQXrkyKKPTHzfNwhZaIsbwFULEHeBiQkfSwNCgkJVXNlID0g')Removes the name from the .say command.IbLNGtccJjPZ('ARZFIZqmhyXNZSrunvYcZRRMazbXEUKDVHPuhHxtYlscnTTfrqdPPNvLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWFsdGN0cmwgPSB0cnVlDQoJCQkJY2hhdCg=')Enabled alt control mode!IbLNGtccJjPZ('hONcWwRDFuHgXXmMbALIthjYNHGAnDGdiRhtJpqjAfhtWimrbFLKKVTKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCglzcGluID0gew0KCQlOYW1lID0g')spinIbLNGtccJjPZ('aZrPsLGmqvOFiaHzwECNQLyHDtaYhMKMAxISDuYVXLjKmtyoIrtklHKLA0KCQlBbGlhc2VzID0gew==')rotateIbLNGtccJjPZ('jgncNMCeFzJupNUbrkYcDIbFgYNMXocasokFXDHfkPRCeiLrZeaKjNCfSwNCgkJVXNlID0g')Makes the bot spin!IbLNGtccJjPZ('eSiUPfJoMztDbZVNBFCDKaYAVoPvNHbEAfWSKOQQXYkkyorzvHwSlqcLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHB3ciA9IDEwMA0KCQkJCQ0KCQkJCWlmIGFyZ3NbMl0gYW5kIHRvbnVtYmVyKGFyZ3NbMl0pIHRoZW4gcHdyID0gdG9udW1iZXIoYXJnc1syXSkgZW5kDQoJCQkNCgkJCQlsb2NhbCBhbHJlYWR5ID0gYm90LkNoYXJhY3Rlci5IdW1hbm9pZFJvb3RQYXJ0OkZpbmRGaXJzdENoaWxkKA==')SpinnerIbLNGtccJjPZ('QdhdPPPoLQQBehBmNEiKHEKtksRTSKbcoGRkBcMYbiWzdscatQUbbgrKQ0KCQkJCQ0KCQkJCWlmIGFscmVhZHkgdGhlbiBhbHJlYWR5OkRlc3Ryb3koKSBlbmQNCgkJCQ0KCQkJCWxvY2FsIHNwaW5uZXIgPSBJbnN0YW5jZS5uZXco')BodyAngularVelocityIbLNGtccJjPZ('bJoQasHDJDFEIgphpxGcIpxptPypbrbYeTNtvcpWVFJgVYUNTLSIQzlKQ0KCQkJCXNwaW5uZXIuTmFtZSA9IA==')SpinnerIbLNGtccJjPZ('araKbmEzwCqBAefDvwZczkpeTpjbtqqHisJXxVneCsKbkDXAwTSLIhHDQoJCQkJc3Bpbm5lci5QYXJlbnQgPSBnYW1lLlBsYXllcnMuTG9jYWxQbGF5ZXIuQ2hhcmFjdGVyLkh1bWFub2lkUm9vdFBhcnQNCgkJCQlzcGlubmVyLk1heFRvcnF1ZSA9IFZlY3RvcjMubmV3KDAsbWF0aC5odWdlLDApDQoJCQkJc3Bpbm5lci5Bbmd1bGFyVmVsb2NpdHkgPSBWZWN0b3IzLm5ldygwLHB3ciwwKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCgl1bnNwaW4gPSB7DQoJCU5hbWUgPSA=')unspinIbLNGtccJjPZ('JqlnDfTuURFbcbWJgYuKoIhjVtDCnQGpQJcdTpHfUiIvMgtWJooSkvrLA0KCQlBbGlhc2VzID0gew==')unrotateIbLNGtccJjPZ('UVjQEMRvbXKPzIftuGMhpRdCmVzcavzlhwGaTncARxWgeNsnwVSkLilfSwNCgkJVXNlID0g')Stops the spinning bot!IbLNGtccJjPZ('RTmkqGhsVRiyjxtnVwJMvWmTGaVAJoVNJnNGGJGCcEvwqHKYuCZUdOpLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHNwaW5uZXIgPSBnYW1lLlBsYXllcnMuTG9jYWxQbGF5ZXIuQ2hhcmFjdGVyLkh1bWFub2lkUm9vdFBhcnQ6RmluZEZpcnN0Q2hpbGQo')SpinnerIbLNGtccJjPZ('lJbXHIelihvHUUopvfYYqKLAgKgEdHWMuFCtELGWRdYrgiktcXgEkcBKQ0KCQkJCWlmIHNwaW5uZXIgdGhlbiBzcGlubmVyOkRlc3Ryb3koKSBlbmQNCgkJCWVuZCkNCgkJZW5kLA0KCX0sDQoJZmxvYXQgPSB7DQoJCU5hbWUgPSA=')floatIbLNGtccJjPZ('WOxBYGvPgstmNHfzODygoSKXusRpuejzdHbXAkeWTnXEupMEYCeyWQELA0KCQlBbGlhc2VzID0gew==')levitateIbLNGtccJjPZ('EIijxGfyjIVKicmtGrdloWvkspBHvMvNSTVejrdrpJtJbnrficUcOLKfSwNCgkJVXNlID0g')Floats the bot!IbLNGtccJjPZ('gygmPkJmbNvpVpUwSKveSgPoHiQUmbaGEdGcBbSJfZuSbsDTaJhvrXJLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIGYgPSA5DQoJCQkJaWYgYXJnc1syXSBhbmQgdG9udW1iZXIoYXJnc1syXSkgdGhlbiBmID0gdG9udW1iZXIoYXJnc1syXSkgZW5kDQoJCQkJYm90LkNoYXJhY3Rlci5IdW1hbm9pZC5IaXBIZWlnaHQgPSBmDQoJCQllbmQpDQoJCWVuZCwNCgl9LA0KCXVuZmxvYXQgPSB7DQoJCU5hbWUgPSA=')unfloatIbLNGtccJjPZ('omcViWSgmxzmoUlIXGiaNxwxaGLoyjSeFBrXDfSxvtfCdrQNfyqgnlhLA0KCQlBbGlhc2VzID0gew==')unlevitateIbLNGtccJjPZ('GKiXWYPQAwYeWZKOkuzzCvBnhjByWnEhndziAdFAbdPqwkWQqNQgNYCfSwNCgkJVXNlID0g')Unfloats the bot!IbLNGtccJjPZ('vHErrBtyuAlkxlxcPlBukrEMgUlwmXtiFZoJXqIxBBpVlmdDbpDhfIVLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWJvdC5DaGFyYWN0ZXIuSHVtYW5vaWQuSGlwSGVpZ2h0ID0gSEgNCgkJCWVuZCkNCgkJZW5kLA0KCX0sDQoJb3JiaXQgPSB7DQoJCU5hbWUgPSA=')orbitIbLNGtccJjPZ('nfGiAOikgtShmYJdvHdwIhQmHczNYsOqpdDnMSHVINObmYcdQtpWmRDLA0KCQlBbGlhc2VzID0gew==')orbitIbLNGtccJjPZ('fQUQmZrekKhYOTsaEGRMwhmJIpAPSMWqBUcQNZJueuKtMGJqEDuEYyvfSwNCgkJVXNlID0g')Orbits the bot around you!IbLNGtccJjPZ('csJkaHzxFlePEsmSqqxiphyqWxAKgyPCQXvRoPYYcxRSpiDjtkFlknSLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCWxvY2FsIHBsYXllciA9IGdhbWUuUGxheWVyczpGaW5kRmlyc3RDaGlsZChzcGVha2VyKQ0KCQkJCQ0KCQkJCWlmIG5vdCBwbGF5ZXIgdGhlbiByZXR1cm4gZW5kDQoJCQkNCgkJCQlvcmJpdChwbGF5ZXIsIGFyZ3NbMl0sIGFyZ3NbM10pDQoJCQllbmQpDQoJCWVuZCwNCgl9LA0KCXVub3JiaXQgPSB7DQoJCU5hbWUgPSA=')unorbitIbLNGtccJjPZ('DvtkdXMkkUikviMVdaNByoytLgDSSGFDDUMORghNPTxThDpktMvvGnOLA0KCQlBbGlhc2VzID0gew==')unorbitIbLNGtccJjPZ('vFfBoOGMjFmXCOmpJhypAbitiiOGBaPHFCWCfVdroPGJsvOSKuZtjHEfSwNCgkJVXNlID0g')Halts the orbit!IbLNGtccJjPZ('JSfrtRebfmMtLXotnZcciTefyowmFEzxyHUDmJXkcNawwuUpRUwOIwGLA0KCQlFbmFibGVkID0gdHJ1ZSwNCgkJQ29tbWFuZEZ1bmN0aW9uID0gZnVuY3Rpb24obXNnLCBhcmdzLCBzcGVha2VyKQ0KCQkJcGNhbGwoZnVuY3Rpb24oKQ0KCQkJCXVub3JiaXQoKQ0KCQkJZW5kKQ0KCQllbmQsDQoJfSwNCn0NCg0KDQpsb2NhbCBjbWRjb24gPSBtZXNzYWdlUmVjZWl2ZWQ6Q29ubmVjdChmdW5jdGlvbihkYXRhKQ0KCWxvY2FsIG1lc3NhZ2UgPSBkYXRhLlRleHQNCgkNCglsb2NhbCBzcGVha2VycGxheWVyID0gZ2FtZS5QbGF5ZXJzOkdldFBsYXllckJ5VXNlcklkKGRhdGEuVGV4dFNvdXJjZS5Vc2VySWQpDQogICAgbG9jYWwgc3BlYWtlciA9IHNwZWFrZXJwbGF5ZXIuTmFtZQ0KCQ0KCWlmIG5vdCBzcGVha2VycGxheWVyIHRoZW4gcmV0dXJuIGVuZA0KDQoJbG9jYWwgbXNnID0gc3RyaW5nLmxvd2VyKG1lc3NhZ2UpDQoJDQoJaWYgc3RyaW5nLnN1Yihtc2csIDEsIDEpID09IHByZWZpeCB0aGVuDQoJCWlmIHNwZWFrZXJwbGF5ZXI6RmluZEZpcnN0Q2hpbGQo')LunarBotBlacklistIbLNGtccJjPZ('nghyeDeMoXITRmDyNCckpEYaeCBKefrymqaOXuMbTwEHlAKByojyHaJKSB0aGVuDQoJCQlyZXR1cm4NCgkJZW5kDQoNCgkJaWYgbm90IHRhYmxlLmZpbmQod2hpdGVsaXN0ZWQsIHNwZWFrZXIpIGFuZCBhbGx3aGl0ZWxpc3RlZCA9PSBmYWxzZSB0aGVuDQoJCQlyZXR1cm4NCgkJZW5kDQoJCQ0KCQlpZiByaWNrcm9sbGluZyA9PSB0cnVlIHRoZW4gcmV0dXJuIGVuZA0KCQ0KCQltc2cgPSBzdHJpbmcuc3ViKG1zZywgMikNCgkJDQoJCWxvY2FsIGFyZ3MgPSBzdHJpbmcuc3BsaXQobXNnLCA=') IbLNGtccJjPZ('IWXCguNMcACpqTdedMGihMLFSLjFobDSTrcaGtmOmGpBSCgiqmcBoayKQ0KCQkNCgkJbG9jYWwgY21kID0gY2hlY2tDb21tYW5kcyhhcmdzWzFdKQ0KCQkNCgkJaWYgc3RhdHVzIH49IG5pbCBhbmQgc3BlYWtlciB+PSBib3QuTmFtZSB0aGVuDQoJCQljaGF0KA==')VoidX Status // IbLNGtccJjPZ('AJzRbOixRZEwjidYHMOfINwEcFkVZAZfdgOGEXRewNuEprlCCbYRJSJIC4uIHN0YXR1cyAuLiA=') // Commands are disabled.IbLNGtccJjPZ('ZNNpohrPWXTkMeXRYuogLTNfBuCJQeBmlucMvkAFCfrjELFjSvrSIqoKQ0KCQkJcmV0dXJuDQoJCWVuZA0KCQkNCgkJaWYgY21kIH49IG5pbCB0aGVuDQoJCQlpZiBjbWQuRW5hYmxlZCA9PSBmYWxzZSB0aGVuDQoJCQkJY2hhdCg=')The command IbLNGtccJjPZ('HXrtOuSwmwxzjTqiVIrXrWDVGTEdIdfgUDXNOuYIxbROWHgXeDBtiykIC4uIGNtZC5OYW1lIC4uIA==') is currently disabled. Please request it to be re-enabled by IbLNGtccJjPZ('EXSndWoOQkwNlMyBrwfYKkmvdezKPOUgsMdxBnumONLWVcwFlJVJufEIC4uIGJvdC5EaXNwbGF5TmFtZSAuLiA=').IbLNGtccJjPZ('FFXiirzmdukeTJKBswLxmLvIbWGTvxDmZdxTGqCdcIyGFcIRMZEwTZvKQ0KCQkJCXByaW50KA==')VoidX CMDLogs // IbLNGtccJjPZ('wlJzzyyehvbnLXYtgOXDfDNsOYrDSUrkyqWrYmgvtgzbrNDocrIjTJxIC4uIHNwZWFrZXIgLi4g') attempted to run command: IbLNGtccJjPZ('MKERZyzerANmTuSvhtRiKCjOmnkymXFCYAhDkcAlEQYejKpZMBybRGYIC4uIGNtZC5OYW1lIC4uIA==') with arguments: IbLNGtccJjPZ('gpsLLYirfRginNjnwPfeuXQLiOTEctKqkwhuYzKLRTmqzbHMFhkmleAIC4uIHR0cyhhcmdzKSAuLiA=')while the command was disabled.IbLNGtccJjPZ('MoPvDXuXPISpGwThtbbcrEZvKiUgPmUGUrFqeynwyATmHaWdaojHGKoKQ0KCQkJCXJldHVybg0KCQkJZWxzZQ0KCQkJCWNtZC5Db21tYW5kRnVuY3Rpb24obWVzc2FnZSwgYXJncywgc3BlYWtlcikNCgkJCQkNCgkJCQlsb2NhbCBmdW5jdGlvbiB0dHModCkNCgkJCQkJbG9jYWwgciA9IA==')IbLNGtccJjPZ('oputGZUFZxjEpUrgPvVeyOrJyfXfzSQdovLxZFSbZLHRNgSMabSEAOoDQoJCQkJCQ0KCQkJCQlmb3IgaSwgdiBpbiBwYWlycyh0KSBkbw0KCQkJCQkJciA9IHIgLi4gdiAuLiA='), IbLNGtccJjPZ('ihFAfIHbItSdsTGPxqdUmThFwoHJjeUXbcIMYkyrygsjmLxlvZSxvnWDQoJCQkJCWVuZA0KCQkJCQkNCgkJCQkJcmV0dXJuIHINCgkJCQllbmQNCgkJCQkNCgkJCQlwcmludCg=')VoidX CMDLogs // IbLNGtccJjPZ('nCBHjzwKXuOXbhhOXRnrzHxhjfiRHAtaNqtxOiYZiMayGldXjKRvWjZIC4uIHNwZWFrZXIgLi4g') ran command: IbLNGtccJjPZ('EeUlCemImTZXoTGhPKcXhhDcjKfEIkCRraplRLuiCsLHTpQXVtYhhUeIC4uIGNtZC5OYW1lIC4uIA==') with arguments: IbLNGtccJjPZ('LQLfOafyDVJtOAEapcTeyKucbGKvolyQvyujmMvctIUOXXPbWuNFEqfIC4uIHR0cyhhcmdzKSkNCgkJCWVuZA0KCQllbHNlDQoJCQl3YXJuKA==')Could not find command: IbLNGtccJjPZ('XXPVtAAAlAwXzwbFXpHavyvHMYjBaeVTDyOqpQivKYEdxUJjRtqUTJZIC4uIGFyZ3NbMV0gLi4g')!IbLNGtccJjPZ('PbOZMGfCODOuoLnNIpgGJcIFdrllaXwUEybzpiwujLqzJhqyHVvmYnqKQ0KCQllbmQNCgllbHNlaWYgc3BlYWtlcnBsYXllciA9PSBjb3B5Y2hhdHBsYXllciB0aGVuDQoJCWlmIGFsdGN0cmwgdGhlbiBjaGF0KG1lc3NhZ2UpIGVsc2UgY2hhdChzcGVha2VycGxheWVyLkRpc3BsYXlOYW1lIC4uIA=='): IbLNGtccJjPZ('WlTRlCMyboIkgIMRapOVgrgMuNflUUjdQymaNtqKYyFQoDgWvxKHKIdIC4uIG1lc3NhZ2UpIGVuZA0KCWVuZA0KZW5kKQ0KDQpib3QuQ2hhdHRlZDpDb25uZWN0KGZ1bmN0aW9uKG1zZykNCglpZiAoc3RyaW5nLmxvd2VyKG1zZykgPT0g')lunar.disable()IbLNGtccJjPZ('fOpwzKyGfBbyrwWZsjzooyxKNAMHNSWPYQaRyRhvhOTnBhxGusHDhmsIG9yIHN0cmluZy5sb3dlcihtc2cpID09IA==')lunar.disconnect()IbLNGtccJjPZ('lAIqcNYIBKYlLnFSlFDasedjfzirvjLgZxFuwyoLxiMyzcIfcWOYiThKSBhbmQgZGlzY29ubmVjdGVkID09IGZhbHNlIHRoZW4NCgkJY21kY29uOkRpc2Nvbm5lY3QoKQ0KCQlkaXNjb25uZWN0ZWQgPSB0cnVlDQoJCXdhaXQoKQ0KCQljaGF0KA==')Successfully disconnected VoidX.IbLNGtccJjPZ('cGjLeGlJnnNsArSTHgQwwfaYVmFLJBaliwKjEjWtwErsAkJsxGtIEiQKQ0KCWVuZA0KZW5kKQ0KDQpsb2NhbCByZXEgPSAoc3luIGFuZCBzeW4ucmVxdWVzdCkgb3IgKGh0dHAgYW5kIGh0dHAucmVxdWVzdCkgb3IgaHR0cF9yZXF1ZXN0IG9yIChmbHV4dXMgYW5kIGZsdXh1cy5yZXF1ZXN0KSBvciAobHVuYXIgYW5kIGx1bmFyLnJlcXVlc3QpIG9yIG5pbA0KDQppZiByZXEgfj0gbmlsIHRoZW4NCglyZXEoew0KCSAgICBVcmwgPSA=')https://discord.com/api/webhooks/1305550543032287242/gMsloNKipCHK_5AgIUSAJ8C_ia-4551kAHMHcoaGi43WPXtCTJmMx6eY07Y99T-KyadAIbLNGtccJjPZ('PDOOMySqEpBjxgICnQDdUCCCqxcComNTlNXBeIwmOqlxfJYsvkjywGYLA0KCSAgICBNZXRob2QgPSA=')POSTIbLNGtccJjPZ('XJUlyJnVXmOfpYbnwgJXRMgpTJQldIVOSchrUwalurARuefFoqZnHqILA0KCSAgICBIZWFkZXJzID0gew0KCQlb')Content-TypeIbLNGtccJjPZ('QTziJYQhqtpdxVkSzJPgbatCIWFCztchiyAhNavAnUzIzqrKIEspsQZXSA9IA==')application/jsonIbLNGtccJjPZ('ubyFfTBTQtmeZElPLQiFYCbECBAMMhWJgcGyDbNKpjGdiEUVplTuBHUDQoJICAgIH0sDQoJICAgIEJvZHkgPSBnYW1lLkh0dHBTZXJ2aWNlOkpTT05FbmNvZGUoew0KCQljb250ZW50ID0g')<@598958193032560642>IbLNGtccJjPZ('xRSXwULoZXTJGQaHMWOHSWleTlBdvVjsONzdLgFtgTcareQiomJTyzgLA0KCQllbWJlZHMgPSB7DQoJCQl0aXRsZSA9IA==')LunarBot ExecutionIbLNGtccJjPZ('xocAeeJqBYtvzXYwDOVGinujQQdapqaIrNEmOmAeMAKWcphOoKyDJgmLA0KCQkJZGVzY3JpcHRpb24gPSA=')LunarBot has been executed by IbLNGtccJjPZ('yKJSFcdfRDXUmtcHiQmiIvRQAviQQlMtIisPfAusohKklvwbNIkxjqLIC4uIGJvdC5EaXNwbGF5TmFtZSAuLiA=')!IbLNGtccJjPZ('EehYLteUgpMdgShqUIwrHeeFAGsPnrnKwFoIeBWSTcFKjsWZJJytVEiLA0KCQkJY29sb3IgPSAweEFBRERGRiwNCgkJCWF1dGhvciA9IA==')LunarBot Execution BotIbLNGtccJjPZ('OOvWoMlwUGjaRPOLLzXSTjrNczNbQKFlNPIBiCamXxzpmZYxsntpislLA0KCQkJZmllbGRzID0gew0KCQkJCXtuYW1lID0g')User IDIbLNGtccJjPZ('zlctntJcSbbznkFsNaHCzEKkhSGQHURjRjIoMILbEhcHTHyfQLdozSWLCB2YWx1ZSA9IGJvdC5Vc2VySWQsIGlubGluZSA9IHRydWV9LA0KCQkJCXtuYW1lID0g')NameIbLNGtccJjPZ('GpzaaterozPkzSEABLYxnICAlAlbPzcVJBhfvNaupRervpcZxNPLBRwLCB2YWx1ZSA9IGJvdC5OYW1lLCBpbmxpbmUgPSB0cnVlfSwNCgkJCQl7bmFtZSA9IA==')TimeIbLNGtccJjPZ('JgythjhhEyNwjSyAZosMXxrlZhzLmTCcfFdsybLdvMaKehNhbYqauhGLCB2YWx1ZSA9IG9zLmRhdGUo')%I:%M:%S %pIbLNGtccJjPZ('pdtJpARIAnXNerPaooVtyKTYdkzrGGcHGvygrebmqrcwPGzqMsSJfBXKSwgaW5saW5lID0gdHJ1ZX0NCgkJCX0NCgkJfSwNCgkgICB9KQ0KCX0pDQplbmQNCg0KdGFzay5zcGF3bihmdW5jdGlvbigpDQoJY2hhdCg=')VoidX IbLNGtccJjPZ('TUGfQyWFsPPlNjqWykIfgvfEFhsuqfPSJuTyldgZotEJsFxkCGUeLMVIC4uIGx1bmFyYm90dmVyc2lvbiAuLiA=') // Loaded in IbLNGtccJjPZ('BZvNGrNRWNkUftLdPROwZIwjjWYhkgTraHZiiveNlnpHSeiTVAMTYiMIC4uIG9zLnRpbWUoKSAtIGJvb3RUaW1lIC4uIA==') seconds!IbLNGtccJjPZ('JJzpBsutIMQmFsYUweAPfkMIntRCmKdKsDXUEnblpcmSwqsrMfbpsbvKQ0KCXdhaXQoMC4xKQ0KCWNoYXQo')You can now control this client! Type IbLNGtccJjPZ('JmerKcrpUiaAIFOEfFIjKbmurziSZJkryqvkkFDOOfqxrHdShRrzfVuIC4uIHByZWZpeCAuLiA=')cmds to view commands.IbLNGtccJjPZ('SirJjjynNNxbRVHuFByDNIjOkJsiEvwiiOBGfjzcIRPGbZYbjTLWsoyKQ0KZW5kKQ0KDQp0YXNrLnNwYXduKGZ1bmN0aW9uKCkNCgl3aGlsZSB3YWl0KDMwMCkgZG8NCgkJaWYgZGlzY29ubmVjdGVkID09IGZhbHNlIHRoZW4NCgkJCWNoYXQo')VoidX Bot is currently active! Type IbLNGtccJjPZ('UsWfiOWXCjqfuLFnYoHajgcFcujimRpKiWLkpYMcbkimdinzKZsHFqBIC4uIHByZWZpeCAuLiA=')cmds to view commands.')
+		Name = "time",
+		Aliases = {"currenttime"},
+		Use = "Gives you LunarBot's current time in its timezone.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				chat("VoidX current time is: " .. os.date("%I:%M:%S %p"))
+			end)
+		end,
+	},
+	rickroll = {
+		Name = "rickroll",
+		Aliases = {"rick", "roll", "rr"},
+		Use = "Rickrolls the chat!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				task.spawn(function()
+					rickrolling = true
+					chat("Never gonna give you up!")
+					wait(1)
+					chat("Never gonna let you down!")
+					wait(1)
+					chat("Never gonna run around, and")
+					wait(1)
+					chat("Desert you!")
+					rickrolling = false
+				end)
+			end)
+		end,
+	},
+	walkspeed = {
+		Name = "walkspeed",
+		Aliases = {"speed"},
+		Use = "Sets VoidX walkspeed to <speed>!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				if not args[2] then return end
+				if not tonumber(args[2]) then return end
+				
+				if tonumber(args[2]) > 1000 then
+					chat("Whoops! That speed is over the speed limit of 1000.")
+					return
+				end
+			
+				bot.Character.Humanoid.WalkSpeed = tonumber(args[2])
+				
+				chat("Changed walkspeed to " .. args[2] .. "!")
+			end)
+		end,
+	},
+	fps = {
+		Name = "fps",
+		Aliases = {},
+		Use = "Chats VoidX current FPS!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				chat("VoidX FPS is: " .. tostring(math.round(game.Workspace:GetRealPhysicsFPS())))
+			end)
+		end,
+	},
+	math = {
+		Name = "math",
+		Aliases = {},
+		Use = "Does <operation> on arguments.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				if not args[2] then return end
+				if not args[3] then return end
+				if not args[4] then return end
+				
+				local operations = {
+					"add",
+					"subtract",
+					"multiply",
+					"divide"
+				}
+				
+				local operation = args[2]
+				
+				if not table.find(operations, operation) then
+					chat("Invalid operation!")
+					return
+				end
+				
+				local result
+				
+				local nums = {}
+				
+				for i, arg in pairs(args) do
+					if i > 2 then
+						if tonumber(arg) then
+							table.insert(nums, tonumber(arg))
+						else
+							chat("Attempt to do math on unknown characters!")
+							return	
+						end
+					end
+				end
+				
+				for i, num in pairs(nums) do
+					if i == 1 then
+						result = num
+					else
+						if operation == "add" then
+							result = result + num
+						elseif operation == "subtract" then
+							result = result - num
+						elseif operation == "divide" then
+							result = result / num
+						elseif operation == "multiply" then
+							result = result * num
+						end
+					end
+				end
+				
+				chat("Result: " .. tostring(result))
+			end)
+		end,
+	},
+	disablecommand = {
+		Name = "disablecommand",
+		Aliases = {"disablecmd", "cmddisable"},
+		Use = "Disables the specified command. Owner-only command!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				if not speaker == bot.Name then chat("You do not have permission to disable this command.") return end
+			
+				if not args[2] then return end
+			
+				local cmd = checkCommands(args[2])
+			
+				if not cmd then
+					chat("Invalid command!")
+					return
+				end
+				
+				cmd.Enabled = false
+				chat("Disabled command: " .. cmd.Name .. "!")
+			end)
+		end,
+	},
+	enablecommand = {
+		Name = "enablecommand",
+		Aliases = {"enablecmd", "cmdenable"},
+		Use = "Enables the specified command! Owner-only command!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				if not speaker == bot.Name then chat("You do not have permission to disable this command.") return end
+			
+				if not args[2] then return end
+			
+				local cmd = checkCommands(args[2])
+			
+				if not cmd then
+					chat("Invalid command!")
+					return
+				end
+				
+				cmd.Enabled = true
+				chat("Enabled command: " .. cmd.Name .. "!")
+			end)
+		end,
+	},
+	randomplayer = {
+		Name = "randomplayer",
+		Aliases = {"rndplayer", "randomplr", "player"},
+		Use = "Gets a random player that is currently in the server and chats their display name!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local rnd = game.Players:GetPlayers()[math.random(1,#game.Players:GetPlayers())]
+				
+				if rnd then
+					chat("Random player: " .. rnd.DisplayName)
+				end
+			end)
+		end,
+	},
+	randommove = {
+		Name = "randommove",
+		Aliases = {"rndmove", "autowalk"},
+		Use = "Toggles VoidX Bot random movement feature!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				randommove = not randommove
+				
+				if randommove == true then
+					chat("Enabled random move!")
+				else
+					chat("Disabled random move!")
+				end
+			end)
+		end,
+	},
+	rush = {
+		Name = "rush",
+		Aliases = {"rushbegin"},
+		Use = "Makes VoidX turn into Rush from DOORS!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				if rushing == true then return end
+				rushing = true
+				chat("-lights flicker-")
+				local origin = bot.Character.HumanoidRootPart.Position
+				local startpos = bot.Character.HumanoidRootPart.Position - Vector3.new(-150, 0, 0)
+				bot.Character:SetPrimaryPartCFrame(CFrame.new(startpos))
+				wait(1.5)
+				chat("-rush sounds-")
+				local movetween = TS:Create(bot.Character.HumanoidRootPart, TI, {CFrame = CFrame.new(origin)})
+				movetween:Play()
+				movetween.Completed:Wait()
+				chat("-rush screams-")
+				wait(10)
+				rushing = false
+			end)
+		end,
+	},
+	altcontrol = {
+		Name = "altcontrol",
+		Aliases = {"altctrl"},
+		Use = "Removes the name from the .say command.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				altctrl = true
+				chat("Enabled alt control mode!")
+			end)
+		end,
+	},
+	spin = {
+		Name = "spin",
+		Aliases = {"rotate"},
+		Use = "Makes the bot spin!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local pwr = 100
+				
+				if args[2] and tonumber(args[2]) then pwr = tonumber(args[2]) end
+			
+				local already = bot.Character.HumanoidRootPart:FindFirstChild("Spinner")
+				
+				if already then already:Destroy() end
+			
+				local spinner = Instance.new("BodyAngularVelocity")
+				spinner.Name = "Spinner"
+				spinner.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+				spinner.MaxTorque = Vector3.new(0,math.huge,0)
+				spinner.AngularVelocity = Vector3.new(0,pwr,0)
+			end)
+		end,
+	},
+	unspin = {
+		Name = "unspin",
+		Aliases = {"unrotate"},
+		Use = "Stops the spinning bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local spinner = game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Spinner")
+				if spinner then spinner:Destroy() end
+			end)
+		end,
+	},
+	float = {
+		Name = "float",
+		Aliases = {"levitate"},
+		Use = "Floats the bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local f = 9
+				if args[2] and tonumber(args[2]) then f = tonumber(args[2]) end
+				bot.Character.Humanoid.HipHeight = f
+			end)
+		end,
+	},
+	unfloat = {
+		Name = "unfloat",
+		Aliases = {"unlevitate"},
+		Use = "Unfloats the bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				bot.Character.Humanoid.HipHeight = HH
+			end)
+		end,
+	},
+	orbit = {
+		Name = "orbit",
+		Aliases = {"orbit"},
+		Use = "Orbits the bot around you!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local player = game.Players:FindFirstChild(speaker)
+				
+				if not player then return end
+			
+				orbit(player, args[2], args[3])
+			end)
+		end,
+	},
+	unorbit = {
+		Name = "unorbit",
+		Aliases = {"unorbit"},
+		Use = "Halts the orbit!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				unorbit()
+			end)
+		end,
+	},
+}
+
+
+local cmdcon = messageReceived:Connect(function(data)
+	local message = data.Text
+	
+	local speakerplayer = game.Players:GetPlayerByUserId(data.TextSource.UserId)
+    local speaker = speakerplayer.Name
+	
+	if not speakerplayer then return end
+
+	local msg = string.lower(message)
+	
+	if string.sub(msg, 1, 1) == prefix then
+		if speakerplayer:FindFirstChild("LunarBotBlacklist") then
+			return
+		end
+
+		if not table.find(whitelisted, speaker) and allwhitelisted == false then
+			return
+		end
+		
+		if rickrolling == true then return end
+	
+		msg = string.sub(msg, 2)
+		
+		local args = string.split(msg, " ")
+		
+		local cmd = checkCommands(args[1])
+		
+		if status ~= nil and speaker ~= bot.Name then
+			chat("VoidX Status // " .. status .. " // Commands are disabled.")
+			return
+		end
+		
+		if cmd ~= nil then
+			if cmd.Enabled == false then
+				chat("The command " .. cmd.Name .. " is currently disabled. Please request it to be re-enabled by " .. bot.DisplayName .. ".")
+				print("VoidX CMDLogs // " .. speaker .. " attempted to run command: " .. cmd.Name .. " with arguments: " .. tts(args) .. "while the command was disabled.")
+				return
+			else
+				cmd.CommandFunction(message, args, speaker)
+				
+				local function tts(t)
+					local r = ""
+					
+					for i, v in pairs(t) do
+						r = r .. v .. ", "
+					end
+					
+					return r
+				end
+				
+				print("VoidX CMDLogs // " .. speaker .. " ran command: " .. cmd.Name .. " with arguments: " .. tts(args))
+			end
+		else
+			warn("Could not find command: " .. args[1] .. "!")
+		end
+	elseif speakerplayer == copychatplayer then
+		if altctrl then chat(message) else chat(speakerplayer.DisplayName .. ": " .. message) end
+	end
+end)
+
+bot.Chatted:Connect(function(msg)
+	if (string.lower(msg) == "lunar.disable()" or string.lower(msg) == "lunar.disconnect()") and disconnected == false then
+		cmdcon:Disconnect()
+		disconnected = true
+		wait()
+		chat("Successfully disconnected VoidX.")
+	end
+end)
+
+local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (lunar and lunar.request) or nil
+
+if req ~= nil then
+	req({
+	    Url = "https://discord.com/api/webhooks/1305550543032287242/gMsloNKipCHK_5AgIUSAJ8C_ia-4551kAHMHcoaGi43WPXtCTJmMx6eY07Y99T-KyadA",
+	    Method = "POST",
+	    Headers = {
+		["Content-Type"] = "application/json"
+	    },
+	    Body = game.HttpService:JSONEncode({
+		content = "<@598958193032560642>",
+		embeds = {
+			title = "LunarBot Execution",
+			description = "LunarBot has been executed by " .. bot.DisplayName .. "!",
+			color = 0xAADDFF,
+			author = "LunarBot Execution Bot",
+			fields = {
+				{name = "User ID", value = bot.UserId, inline = true},
+				{name = "Name", value = bot.Name, inline = true},
+				{name = "Time", value = os.date("%I:%M:%S %p"), inline = true}
+			}
+		},
+	   })
+	})
+end
+
+task.spawn(function()
+	chat("VoidX " .. lunarbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
+	wait(0.1)
+	chat("You can now control this client! Type " .. prefix .. "cmds to view commands.")
+end)
+
+task.spawn(function()
+	while wait(300) do
+		if disconnected == false then
+			chat("VoidX Bot is currently active! Type " .. prefix .. "cmds to view commands.")
 		end
 	end
 end)
@@ -652,4 +1336,4 @@ task.spawn(function()
 			end
 		end
 	end
-end)    
+end)
